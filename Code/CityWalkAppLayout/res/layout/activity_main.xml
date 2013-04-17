@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#3a5976"
     tools:context=".MainActivity" >
 
     <HorizontalScrollView
@@ -10,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:background="#4ac925"
         android:layout_alignParentTop="true" >
 
         <LinearLayout
@@ -22,6 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Liked     "
+                android:textColor="#FFFFFF"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -29,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Newest     "
+                android:textColor="#FFFFFF"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -36,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recommended     "
+                android:textColor="#FFFFFF"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -43,17 +48,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Most Viewed"
+                android:textColor="#FFFFFF"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
     </HorizontalScrollView>
+    
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/horizontalScrollView1" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/horizontalScrollView1"
-        android:orientation="vertical" >
-    </LinearLayout>
+	</ListView>
 
 </RelativeLayout>
