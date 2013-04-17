@@ -4,5 +4,10 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+<<<<<<< HEAD
+=======
+	<classpathentry kind="lib" path="libs/google-play-services_lib.jar"/>
+	<classpathentry kind="lib" path="libs/google-play-services.jar"/>
+>>>>>>> b02e0afd5fc49cf0877766a719e86002373c60fe
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
