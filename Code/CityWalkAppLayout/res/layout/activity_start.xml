@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3a5976"
-    tools:context=".ListViewer" >
+    tools:context=".StartActivity" >
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
