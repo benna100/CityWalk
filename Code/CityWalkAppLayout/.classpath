@@ -4,6 +4,6 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="C:/Users/Simon/Desktop/git/prototypeudvikling/CityWalk/Code/CityWalkAppLayout/libs/google-play-services_lib.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Anders/Documents/GitHub/CityWalk/Code/CityWalkAppLayout/libs/google-play-services_lib.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

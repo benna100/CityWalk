@@ -16,7 +16,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Intent start = new Intent(this, StartActivity.class);
+		Intent start = new Intent(this, CategoryActivity.class);
 		startActivity(start);
 	}
 
