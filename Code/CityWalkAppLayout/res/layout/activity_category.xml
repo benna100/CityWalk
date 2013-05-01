@@ -1,28 +1,34 @@
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/dark_gradient"
-   	android:id="@+id/info"
-    android:layout_gravity="right" 
-    android:orientation="vertical"
-
-    tools:context=".CategoryActivity"
-    android:numColumns="2" >
+    android:orientation="horizontal"
+    android:padding="10dp" >
+    
     <TextView
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@+id/label"
-        android:textSize="30px" >
+        android:layout_weight="1"
+        android:layout_gravity="left" 
+        android:textSize="30px"
+        android:textColor="#FFFFFF"
+        android:layout_marginLeft="5dp" >
     </TextView>
-	<ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginRight="5px"
+
+    <ImageView
+        android:id="@+id/arrow"
+        
+        android:layout_height="50px"
+        android:layout_marginLeft="5px"
+        android:layout_marginRight="20px"
         android:layout_marginTop="5px"
-        android:src="@drawable/right_arrow" >
-	</ImageView>
+        android:layout_gravity="right"
+        android:layout_weight="0"
+        android:layout_width="wrap_content"
+        android:src="@drawable/right_arrow" />
 	
-</LinearLayout >
+</LinearLayout  >
