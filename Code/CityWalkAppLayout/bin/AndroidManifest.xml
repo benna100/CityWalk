@@ -26,6 +26,10 @@
             android:name="com.example.citywalkapplayout.StartActivity"
             android:label="@string/title_activity_start" >
         </activity>
+        <activity
+            android:name="com.example.citywalkapplayout.CategoryActivity"
+            android:label="@string/title_activity_start" >
+        </activity>
     </application>
 
 </manifest>

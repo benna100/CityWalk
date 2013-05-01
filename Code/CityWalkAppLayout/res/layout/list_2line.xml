@@ -13,8 +13,8 @@
         <ImageView
             android:id="@+id/icon1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mermaid" />
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -77,8 +77,8 @@
         <ImageView
             android:id="@+id/icon2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mermaid" />
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -90,9 +90,8 @@
             android:id="@+id/title2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sightseeing"
-            android:textColor="#FFFFFF"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -101,16 +100,15 @@
             <ImageView
                 android:id="@+id/ImageView05"
                 android:layout_width="35dp"
-                android:layout_height="25dp"
-                android:src="@drawable/checkeredflag" />
+                android:layout_height="25dp" />
 
             <TextView
                 android:id="@+id/dist2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-            	android:textColor="#FFFFFF"
-                android:text="300m" />
+                android:textColor="#FFFFFF" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -120,16 +118,15 @@
             <ImageView
                 android:id="@+id/ImageView04"
                 android:layout_width="35dp"
-                android:layout_height="25dp"
-                android:src="@drawable/stopwatch" />
+                android:layout_height="25dp" />
 
             <TextView
                 android:id="@+id/time2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-            	android:textColor="#FFFFFF"
-                android:text="30min" />
+                android:textColor="#FFFFFF" />
+
         </LinearLayout>
     </LinearLayout>
 
