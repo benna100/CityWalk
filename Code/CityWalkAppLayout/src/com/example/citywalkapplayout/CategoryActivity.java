@@ -4,15 +4,24 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ListActivity;
+import android.graphics.Color;
 import android.view.Menu;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class CategoryActivity extends Activity {
+public class CategoryActivity extends ListActivity {
 
+	static final String[] categories2 = new String[] { "Browse walks" ,"Architectural", "Inspirational" , "Scenic", "Romantic", "Historical", "Shopping" , "Entertaining"  };
 	private ArrayList<String> categories = new ArrayList();
 
     private LinearLayout ll;
@@ -21,31 +30,16 @@ public class CategoryActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		categories.add("title1");
-		setContentView(R.layout.activity_category);
-		LinearLayout linearLayout = (LinearLayout)findViewById(R.id.info);
-		int counter = 1;
-		for (String title : categories) {
-			TextView valueTV = new TextView(this);
-		    valueTV.setText("hallo hallo");
-		    valueTV.setId(counter);
-		    valueTV.setLayoutParams(new LayoutParams(
-		            LayoutParams.WRAP_CONTENT,
-		            LayoutParams.WRAP_CONTENT));
-		    linearLayout.addView(valueTV);
-		    ImageView imageView = new ImageView(this);
-		    
-		    counter ++;
-		}
-		
+		setListAdapter(new CategoryAdapter(this, categories2));
+		getWindow().getDecorView().setBackgroundColor(Color.BLACK);
 	}
-
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.category, menu);
-		return true;
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+ 
+		//get selected items
+		String selectedValue = (String) getListAdapter().getItem(position);
+		Toast.makeText(this, selectedValue, Toast.LENGTH_SHORT).show();
+ 
 	}
 
 }
