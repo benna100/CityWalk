@@ -3,6 +3,11 @@ package com.example.citywalkapplayout;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Array;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +33,8 @@ public class ServerAccessLayer {
 	 
 	public Tour getTour(String tourId){
 		
-		
-		
 		List<Notes> noteList = getNotesList(tourId);
+		List<tourLocations> tourLocations = getTourLocations(tourId);
 		JSONObject tourDatabaseObject = getTourFromDatabase(tourId);
 		int id = 0;
 		String dateAdded = null;
@@ -46,7 +50,7 @@ public class ServerAccessLayer {
 			title = tourDatabaseObject.getString("title");
 			duration = Integer.parseInt(tourDatabaseObject.getString("duration"));
 			views = Integer.parseInt(tourDatabaseObject.getString("views"));
-			rating = Double.parseDouble(tourDatabaseObject.getString("views"));
+			rating = Double.parseDouble(tourDatabaseObject.getString("rating"));
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,6 +65,7 @@ public class ServerAccessLayer {
 		tour.setDuration(duration);
 		tour.setId(id);
 		tour.setNotes(noteList);
+		tour.setTourLocations(tourLocations);
 		tour.setRating(rating);
 		tour.setTitle(title);
 		tour.setViews(views);
@@ -71,20 +76,11 @@ public class ServerAccessLayer {
 	public List<Notes> getNotesList(String tourId){
 		
 		String notes;
-		
 		String query = "select * from notes where tourId=" + tourId;
+		//tour = sendQuery(query);
 		
-		notes = sendQuery(query);
-		
-		JSONTokener tokener = new JSONTokener(notes);
-		JSONArray finalResult = null;
-		try {
-			finalResult = new JSONArray(tokener);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+				//JSONTokener tokener = new JSONTokener(tour);
+				JSONArray finalResult = sendQuery(query);
 		
 		List<Notes> noteList = new ArrayList<Notes>();
 		for (int i=0; i<finalResult.length(); i++) {
@@ -129,38 +125,113 @@ public class ServerAccessLayer {
 		
 	}
 	
+
+public List<tourLocations> getTourLocations(String tourId){
+		
+		String notes;
+		String query = "select * from tourLocationPoints where tourId=" + tourId;
+		//notes = sendQuery(query);
+		
+		//JSONTokener tokener = new JSONTokener(notes);
+		
+		
+		//tour = sendQuery(query);
+		
+				//JSONTokener tokener = new JSONTokener(tour);
+				JSONArray finalResult = sendQuery(query);
+		
+		
+		List<tourLocations> locationPoints = new ArrayList<tourLocations>();
+		for (int i=0; i<finalResult.length(); i++) {
+		    try {
+		    	JSONObject jsonNote = finalResult.getJSONObject(i);
+		    	String location = jsonNote.getString("location");
+		    	String locationIndexString = jsonNote.getString("locationIndex");
+		    	int locationIndex = Integer.parseInt(locationIndexString);
+		    	
+		    		
+		    	tourLocations locations = new tourLocations();
+		    	locations.setLcation(location);
+		    	locations.setLocationIndex(locationIndex);		    		
+		    	locationPoints.add(locations);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return locationPoints;
+		
+	}
+	
+	
 	public JSONObject getTourFromDatabase(String tourId){
 		
 		String tour;
 		
 		String query = "select * from tour where id=" + tourId;
 		
-		tour = sendQuery(query);
+		//tour = sendQuery(query);
 		
-		JSONTokener tokener = new JSONTokener(tour);
-		JSONArray finalResult = null;
-		JSONObject jsonNote = null;
-		try {
-			finalResult = new JSONArray(tokener);
-			jsonNote = finalResult.getJSONObject(0);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+				//JSONTokener tokener = new JSONTokener(tour);
+				JSONArray finalResult = sendQuery(query);
+				JSONObject jsonNote = null;
+				try {
+					//finalResult = new JSONArray(tokener);
+					jsonNote = finalResult.getJSONObject(0);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		
 		return jsonNote;
 		
 	}
 	
-	public String sendQuery(String query){
+	public JSONArray sendQuery(String query){
 		
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost("http://10.16.161.57/cityWalkWebServer.php/");
+		HttpPost httppost = new HttpPost("http://192.168.2.11/cityWalkWebServer.php");
 		HttpResponse response = null;
 		String responseString =  null;
+		String url = "jdbc:mysql://cbech.com:3306/";
+        String dbName = "CityWalkdb";
+        String driver = "com.mysql.jdbc.Driver";
+        String userName = "AMN";
+        String password = "MYsqlAMN";
+        JSONArray elements = new JSONArray();
+        try {
+        Class.forName(driver).newInstance();
+        Connection conn = DriverManager.getConnection(url+dbName,userName,password);
+        Statement st = conn.createStatement();
+        ResultSet res = st.executeQuery(query); 
+        int i = 1;
+        elements = new JSONArray();
+        while (res.next()) {
+        	
+        	int attributesNumber = res.getMetaData().getColumnCount();
+        	
+        	JSONObject json = new JSONObject();
+        	for (int j = 1; j <= attributesNumber; j++){
+        		String columnName = res.getMetaData().getColumnName(j).toString();
+        		String columnValue = res.getObject(j).toString();
+        		json.put(columnName, columnValue);
+        		
+        		
+        	}
+        	elements.put(json);
+         }
+		
+        System.out.println("ads");
+		
+        }
+        catch(Exception E){
+        	System.out.println("error");
+        }
+		
+		
+		
+		/*
 		try {
-			
-			System.out.println("In try");
 		    // Add your data
 		    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 		    nameValuePairs.add(new BasicNameValuePair("fname", query));
@@ -179,8 +250,46 @@ public class ServerAccessLayer {
 		    // TODO Auto-generated catch block
 			System.out.println("in catch IOException");
 		}
+		*/
+        
+        return elements;
 		
-		return responseString;
 		
+	}
+	
+	public List<Tour> getSortedTour(String orderAttribute){
+		
+		String tour;
+		
+		String query = "select * from tour ORDER BY " + orderAttribute;
+		
+		//tour = sendQuery(query);
+		
+		//JSONTokener tokener = new JSONTokener(tour);
+		JSONArray finalResult = sendQuery(query);
+		JSONObject jsonNote = null;
+		try {
+			//finalResult = new JSONArray(tokener);
+			jsonNote = finalResult.getJSONObject(0);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<Tour> tourList = new ArrayList<Tour>();
+		List<tourLocations> locationPoints = new ArrayList<tourLocations>();
+		for (int i=0; i<finalResult.length(); i++) {
+		    try {
+		    	JSONObject jsonNote2 = finalResult.getJSONObject(i);
+		    	String tourId = jsonNote2.getString("id");
+		    	Tour tour1 = new Tour();
+		    	tour1 = getTour(tourId);
+		    	tourList.add(tour1);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return tourList;
+		//return null;
 	}
 }

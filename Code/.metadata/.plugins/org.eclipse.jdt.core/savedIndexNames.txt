@@ -1,11 +1,20 @@
-INDEX VERSION 1.126+C:\Users\Anders\Documents\GitHub\CityWalk\Code\.metadata\.plugins\org.eclipse.jdt.core
-2087823202.index
-77468379.index
-543892018.index
-1883906035.index
-1017120774.index
-848856923.index
-1035632413.index
-1441474662.index
-1144087964.index
+INDEX VERSION 1.126+E:\DTU\Mobile prototyping\CityWalk\CityWalk\Code\.metadata\.plugins\org.eclipse.jdt.core
+3922060224.index
+1695990852.index
+598255596.index
+3332341552.index
+3990006106.index
 1281430516.index
+957431708.index
+2530963603.index
+1240965642.index
+1017120774.index
+4162661500.index
+1371643843.index
+2491898745.index
+543892018.index
+3046310490.index
+272714055.index
+2087823202.index
+1195638287.index
+848856923.index

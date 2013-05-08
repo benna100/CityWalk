@@ -12,6 +12,7 @@ public class Tour {
 	/*LocalDate dateAdded;*/
 	String dateAdded;
 	List<Notes> notesList;
+	List<tourLocations> tourLocations;
 	int id;
 	String title;
 	int duration;
@@ -51,6 +52,13 @@ public class Tour {
 	}
 	public List<Notes> getNoteList(){
 		return this.notesList;
+	}
+	
+	public void setTourLocations(List<tourLocations> locations){
+		this.tourLocations = locations;
+	}
+	public List<tourLocations> getTourLocations(){
+		return this.tourLocations;
 	}
 	
 	public void setTitle(String title){
