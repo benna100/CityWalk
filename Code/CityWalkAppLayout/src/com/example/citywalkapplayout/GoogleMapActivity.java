@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-
 //import com.example.googlemapsapitester.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,112 +30,171 @@ import com.google.android.maps.MapView;
 
 import android.support.v4.app.FragmentActivity;
 
-public class GoogleMapActivity extends FragmentActivity implements OnMarkerClickListener, OnInfoWindowClickListener{
+public class GoogleMapActivity extends FragmentActivity implements
+		OnMarkerClickListener, OnInfoWindowClickListener {
 
 	private GoogleMap mMap;
 	private static final LatLng copenhagen1 = new LatLng(55.706176, 12.56278);
 	private static final LatLng copenhagen2 = new LatLng(55.709126, 12.577543);
 	private static final LatLng copenhagen3 = new LatLng(55.699647, 12.577114);
 	private static final LatLng copenhagen4 = new LatLng(55.691084, 12.560892);
-	
+
 	private static final OnMarkerClickListener OnMarkerClickListener = null;
 	private List<LatLng> tour1 = null;
 	private UiSettings mUiSettings;
-	
+
 	static TextView LocationText;
 	MapView mapView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		//Create simple map
-		
+		setContentView(R.layout.activity_googlemapactivity);
+		// Create simple map
+
 		/*
-		LocationListener locationListener = new MyLocationListener();
-		
-	    //setting up the location manager
-	    LocationManager locman = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-	    locman.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, (float) 0.01, locationListener); 
-
-	    //Adds a current location overlay to the map 'mapView' and turns on the map's compass
-
-	    MyLocation myLocationOverlay = new MyLocation(this, mapView);
-	    myLocationOverlay.enableMyLocation();
-	    myLocationOverlay.enableCompass();
-
-	    mapView.getOverlays().add(myLocationOverlay);
-	    mapView.postInvalidate();
-	    */
+		 * LocationListener locationListener = new MyLocationListener();
+		 * 
+		 * //setting up the location manager LocationManager locman =
+		 * (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		 * 
+		 * locman.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500,
+		 * (float) 0.01, locationListener);
+		 * 
+		 * //Adds a current location overlay to the map 'mapView' and turns on
+		 * the map's compass
+		 * 
+		 * MyLocation myLocationOverlay = new MyLocation(this, mapView);
+		 * myLocationOverlay.enableMyLocation();
+		 * myLocationOverlay.enableCompass();
+		 * 
+		 * mapView.getOverlays().add(myLocationOverlay);
+		 * mapView.postInvalidate();
+		 */
 		setupMap();
 	}
-	
-	private void setupMap(){
-		mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                .getMap();
-		//Set initial view to Copenhagen
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(copenhagen1));
-		//Add a marker at 56, 45
-        Marker mark = mMap.addMarker(new MarkerOptions().position(copenhagen1).title("Stab alley"));
-        
-        mUiSettings= mMap.getUiSettings();        
-        
-		//Draw a line on a map
-        mMap.setOnInfoWindowClickListener(this);
-        List<LatLng> tour1 = new ArrayList<LatLng>();
-        tour1.add(copenhagen1);
-        tour1.add(copenhagen2);
-        tour1.add(copenhagen3);
-        tour1.add(copenhagen4);
-        
-        tour1.listIterator();
-        
-        List <LatLng> geoPoints = new ArrayList<LatLng>();
-        
-        int geoPointCounter = 0;
-        
-        for (LatLng geoPoint : tour1){
-        	geoPoints.add(geoPoint);
 
-        	if((geoPointCounter != 0) && (geoPointCounter != tour1.size())){
-        		mMap.addPolyline((new PolylineOptions()).add(geoPoints.get(geoPointCounter-1), geoPoints.get(geoPointCounter)) .width(6) .color(Color.BLUE));
-        	}
-        	geoPointCounter += 1;
-        }
-        mMap.addPolyline((new PolylineOptions()).add(geoPoints.get(0), geoPoints.get(tour1.size()-1)) .width(6) .color(Color.BLUE));
-        
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(copenhagen1, 10.0f));
-        
-		//mMap.addPolyline((new PolylineOptions()).add(copenhagen1, copenhagen2));
+	private void setupMap() {
+		if (mMap == null) {
+			mMap = ((SupportMapFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.map))
+
+			.getMap();
+		}
 		
-        mMap.setMyLocationEnabled(true);
-        mUiSettings.setCompassEnabled(true);
-        
-        mUiSettings.setRotateGesturesEnabled(true);
-        
-        mMap.setOnMyLocationChangeListener(new OnMyLocationChangeListener() {
+		Tour tour = new Tour();
+		ServerAccessLayer server = new ServerAccessLayer();
+		tour = server.getTour("2");
+		server.getSortedTour("rating");
+		
+		if (mMap != null) {
+			// Set initial view to Copenhagen
+			mMap.moveCamera(CameraUpdateFactory.newLatLng(copenhagen1));
+			// Add a marker at 56, 45
 			
-			@Override
-			public void onMyLocationChange(Location location) {
-				nextNoteEvent(location);
-				
-			}
-		});
-        
-	}
-	
-	public boolean onMarkerClick(final Marker marker){
+		}
+		 mUiSettings= mMap.getUiSettings();
 		
+		 //Get the location points for a specific tour
+		 List<LatLng> tour1 = new ArrayList<LatLng>();
+		 for(int i = 0; i <tour.getTourLocations().size(); i++){
+			 for(int j = 0; j <tour.getTourLocations().size(); j++){
+				 tourLocations location = new tourLocations();
+				 location = tour.getTourLocations().get(i);
+				 //String indexNumber = Integer.toString(location.locationIndex);
+				 if(location.locationIndex==j){
+					 String latLngLocation = location.location;
+					 String[] latLng = latLngLocation.split(";");
+					 double lat = Double.parseDouble(latLng[0]);
+					 double lng = Double.parseDouble(latLng[1]);
+					 LatLng latLngPosition = new LatLng(lat, lng);
+					 tour1.add(latLngPosition);
+				 }
+			 }
+		 }
+		 //Draw the location points connected to a tour as a overlay
+		 List <LatLng> geoPoints = new ArrayList<LatLng>();
+		 int geoPointCounter = 0;
+		 for (LatLng geoPoint : tour1){
+			 geoPoints.add(geoPoint);
+			 if((geoPointCounter != 0) && (geoPointCounter != tour1.size())){
+				 mMap.addPolyline((new PolylineOptions()).add(geoPoints.get(geoPointCounter-1), geoPoints.get(geoPointCounter)) .width(6) .color(Color.BLUE));
+			 }
+			 geoPointCounter += 1;
+		 }
+		 
+		 for(int i = 0; i <tour.getNoteList().size(); i++){
+			 List<Notes> notesList = new ArrayList<Notes>();
+			 notesList = tour.getNoteList();
+			 String noteType = notesList.get(i).getClass().getName();
+			 if(noteType.equals("com.example.citywalkapplayout.POI")){
+				 POI poiNote = new POI();
+				 poiNote = (POI) notesList.get(i);
+				 System.out.println("as");
+				 String title = poiNote.noteTitle;
+				 String location = poiNote.location;
+				 String[] latLng = location.split(";");
+				 double lat = Double.parseDouble(latLng[0]);
+				 double lng = Double.parseDouble(latLng[1]);
+				 LatLng notePosition = new LatLng(lat, lng);
+				 Marker mark = mMap.addMarker(new MarkerOptions().position(notePosition).title(title));
+			 }
+			 else if(noteType.equals("com.example.citywalkapplayout.TourNotes")){
+				 TourNotes tourNote = new TourNotes();
+				 tourNote = (TourNotes) notesList.get(i);
+				 String location = tourNote.location;
+				 String title = tourNote.noteTitle;
+				 String[] latLng = location.split(";");
+				 double lat = Double.parseDouble(latLng[0]);
+				 double lng = Double.parseDouble(latLng[1]);
+				 LatLng notePosition = new LatLng(lat, lng);
+				 Marker mark = mMap.addMarker(new MarkerOptions().position(notePosition).title(title));
+				 
+			 }
+			 System.out.println(noteType);
+			 
+		 }
+		 
+		 
+		 mMap.setOnInfoWindowClickListener(this);
+		
+		 tour1.listIterator();
+		
+		 
+		 
+		 //Adding the loop
+		 //mMap.addPolyline((new PolylineOptions()).add(geoPoints.get(0),geoPoints.get(tour1.size()-1)) .width(6) .color(Color.BLUE));
+		
+		 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(copenhagen1,10.0f));
+		
+		 //mMap.addPolyline((new PolylineOptions()).add(copenhagen1,copenhagen2));
+		
+		 mMap.setMyLocationEnabled(true);
+		 mUiSettings.setCompassEnabled(true);
+		
+		 mUiSettings.setRotateGesturesEnabled(true);
+		
+		 mMap.setOnMyLocationChangeListener(new OnMyLocationChangeListener() {
+		
+		 @Override
+		 public void onMyLocationChange(Location location) {
+		 nextNoteEvent(location);
+		
+		 }
+		 });
+
+	}
+
+	public boolean onMarkerClick(final Marker marker) {
+
 		return true;
 	}
-	
-	public void nextNoteEvent(Location location){
-		
-		//if(location)
+
+	public void nextNoteEvent(Location location) {
+
+		// if(location)
 	}
-	
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -146,12 +204,11 @@ public class GoogleMapActivity extends FragmentActivity implements OnMarkerClick
 
 	@Override
 	public void onInfoWindowClick(Marker marker) {
-		if(marker.getTitle().equals("Marker 1")){
-			//Intent intent = new Intent(this, Marker1.class);
-			//startActivity(intent);
+		if (marker.getTitle().equals("Marker 1")) {
+			// Intent intent = new Intent(this, Marker1.class);
+			// startActivity(intent);
 		}
-		
-		
+
 	}
 
 }

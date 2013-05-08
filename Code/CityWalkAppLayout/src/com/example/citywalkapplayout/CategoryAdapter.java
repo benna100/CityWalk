@@ -32,9 +32,15 @@ public class CategoryAdapter extends ArrayAdapter<String> {
 		String s = values[position];
  
 		System.out.println(s);
-
+		if (s.contains("Browse")){
+			imageView.getLayoutParams().height = 100;
+			imageView.setImageResource(R.drawable.search_icon);
+			textView.setTextSize(40);
+			
+		}
+		else {
 		imageView.setImageResource(R.drawable.right_arrow);
- 
+		}
 		return rowView;
 	}
 }
