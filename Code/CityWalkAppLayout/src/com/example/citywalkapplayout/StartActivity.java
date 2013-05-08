@@ -1,11 +1,24 @@
 package com.example.citywalkapplayout;
 
+import android.R.bool;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Intent;
+import android.graphics.Rect;
 import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.TouchDelegate;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class StartActivity extends Activity {
+	
+	float x = 0;
+	float y = 0;
+	int pos = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -16,11 +29,77 @@ public class StartActivity extends Activity {
 		PreviewTour tour2 = new PreviewTour("Sight2","600m","60min",R.drawable.mermaid);
 		PreviewTour tour3 = new PreviewTour("Sight2","600m","60min",R.drawable.mermaid);
 		PreviewTour tour4 = new PreviewTour("Sight","300m","30min",R.drawable.lakes);
-		PreviewTour[] tours = {tour1,tour2,tour3};
+		final PreviewTour[] tours = {tour1,tour2,tour3};
 		
-		ListView list = (ListView) findViewById(R.id.list);
+		ListView listView = (ListView) findViewById(R.id.list);
 		
-		list.setAdapter(new CityWalkTourAdapter(this, tours));
+		final CityWalkTourAdapter adapter = new CityWalkTourAdapter(this, tours);
+		
+		listView.setAdapter(adapter);
+		
+		listView.setOnTouchListener(new View.OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN){
+					ListView layout = (ListView)v;
+					int x = (int) event.getX();
+					int y = (int) event.getY();
+					int pos;
+					int un = 0;
+					boolean uneven = false;
+
+				        for(int i =0; i< layout.getChildCount(); i++)
+				        {
+				            View view = layout.getChildAt(i);
+
+
+				            Rect outRect = new Rect(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
+
+				            if(outRect.contains(x, y))
+				            {
+				            	pos = (i+1)*2-(i+1);
+				            	if(tours.length+1 > pos){
+					            	if(tours.length % 2 == 1){
+					            		un = tours.length-1;
+					            		uneven = true;
+					            	}
+					            	
+					            	int w = view.getWidth();
+				            		if(x < w/2 | pos>un & uneven){
+				            			pos -= 1;
+				            		}
+					            	
+					            	PreviewTour t = tours[pos];
+				            		
+				            		t.setTitle(""+layout.getChildCount());
+	
+				  		    	  	adapter.notifyDataSetChanged();
+					            }
+				            }
+				        }
+				    
+	            }
+	            return true;
+			}
+		});
+		
+//		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//		      @Override
+//		      public void onItemClick(AdapterView<?> parent, final View view,int position, long id) {
+//		    	  final PreviewTour t;
+//		    	  try {
+//		    		  t = (PreviewTour) parent.getItemAtPosition(position+pos);
+//			    	  t.setTitle("" + parent.getCount());
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//		    	  adapter.notifyDataSetChanged();
+//		      }
+//
+//		 });
 	}
 
 	@Override
