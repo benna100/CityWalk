@@ -22,6 +22,7 @@ public class StartActivity extends Activity {
 	float x = 0;
 	float y = 0;
 	int pos = 0;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class StartActivity extends Activity {
 //			t.setDistance("30km");
 //			t.setDuration(90);new Tour()new Tour()new Tour()
 //		}
+
 		
 		ServerAccessLayer server = new ServerAccessLayer();
 		final List<Tour> tourList = server.getSortedTour("views");
@@ -89,8 +91,7 @@ public class StartActivity extends Activity {
 					            	
 					            	selected = tours[pos];
 					            	
-					            	Intent map = new Intent(null, GoogleMapActivity.class);
-					        		startActivity(map);
+					            	select();
 					        		
 				  		    	  	adapter.notifyDataSetChanged();
 					            }
@@ -118,6 +119,11 @@ public class StartActivity extends Activity {
 ////		      }
 ////
 ////		 });
+	}
+	
+	public void select(){
+		Intent map = new Intent(this, GoogleMapActivity.class);
+		startActivity(map);
 	}
 
 	@Override

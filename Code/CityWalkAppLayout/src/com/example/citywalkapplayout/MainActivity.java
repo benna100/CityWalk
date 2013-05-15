@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Intent start = new Intent(this, GoogleMapActivity.class);
+		Intent start = new Intent(this, StartActivity.class);
 		startActivity(start);
 	}
 

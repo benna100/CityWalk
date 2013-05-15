@@ -42,6 +42,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 	private static final OnMarkerClickListener OnMarkerClickListener = null;
 	private List<LatLng> tour1 = null;
 	private UiSettings mUiSettings;
+	private Tour tour;
 
 	static TextView LocationText;
 	MapView mapView;
@@ -81,107 +82,115 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 			.getMap();
 		}
-		
-		Tour tour = new Tour();
-		ServerAccessLayer server = new ServerAccessLayer();
-		tour = server.getTour("2");
-		server.getSortedTour("rating");
-		
+
+		tour = StartActivity.selected;
+
+		// Tour tour = new Tour();
+		// ServerAccessLayer server = new ServerAccessLayer();
+		// tour = server.getTour("2");
+		// server.getSortedTour("rating");
+
 		if (mMap != null) {
 			// Set initial view to Copenhagen
 			mMap.moveCamera(CameraUpdateFactory.newLatLng(copenhagen1));
 			// Add a marker at 56, 45
-			
+
 		}
-		 mUiSettings= mMap.getUiSettings();
-		
-		 //Get the location points for a specific tour
-		 List<LatLng> tour1 = new ArrayList<LatLng>();
-		 for(int i = 0; i <tour.getTourLocations().size(); i++){
-			 for(int j = 0; j <tour.getTourLocations().size(); j++){
-				 tourLocations location = new tourLocations();
-				 location = tour.getTourLocations().get(i);
-				 //String indexNumber = Integer.toString(location.locationIndex);
-				 if(location.locationIndex==j){
-					 String latLngLocation = location.location;
-					 String[] latLng = latLngLocation.split(";");
-					 double lat = Double.parseDouble(latLng[0]);
-					 double lng = Double.parseDouble(latLng[1]);
-					 LatLng latLngPosition = new LatLng(lat, lng);
-					 tour1.add(latLngPosition);
-				 }
-			 }
-		 }
-		 //Draw the location points connected to a tour as a overlay
-		 List <LatLng> geoPoints = new ArrayList<LatLng>();
-		 int geoPointCounter = 0;
-		 for (LatLng geoPoint : tour1){
-			 geoPoints.add(geoPoint);
-			 if((geoPointCounter != 0) && (geoPointCounter != tour1.size())){
-				 mMap.addPolyline((new PolylineOptions()).add(geoPoints.get(geoPointCounter-1), geoPoints.get(geoPointCounter)) .width(6) .color(Color.BLUE));
-			 }
-			 geoPointCounter += 1;
-		 }
-		 
-		 for(int i = 0; i <tour.getNoteList().size(); i++){
-			 List<Notes> notesList = new ArrayList<Notes>();
-			 notesList = tour.getNoteList();
-			 String noteType = notesList.get(i).getClass().getName();
-			 if(noteType.equals("com.example.citywalkapplayout.POI")){
-				 POI poiNote = new POI();
-				 poiNote = (POI) notesList.get(i);
-				 System.out.println("as");
-				 String title = poiNote.noteTitle;
-				 String location = poiNote.location;
-				 String[] latLng = location.split(";");
-				 double lat = Double.parseDouble(latLng[0]);
-				 double lng = Double.parseDouble(latLng[1]);
-				 LatLng notePosition = new LatLng(lat, lng);
-				 Marker mark = mMap.addMarker(new MarkerOptions().position(notePosition).title(title));
-			 }
-			 else if(noteType.equals("com.example.citywalkapplayout.TourNotes")){
-				 TourNotes tourNote = new TourNotes();
-				 tourNote = (TourNotes) notesList.get(i);
-				 String location = tourNote.location;
-				 String title = tourNote.noteTitle;
-				 String[] latLng = location.split(";");
-				 double lat = Double.parseDouble(latLng[0]);
-				 double lng = Double.parseDouble(latLng[1]);
-				 LatLng notePosition = new LatLng(lat, lng);
-				 Marker mark = mMap.addMarker(new MarkerOptions().position(notePosition).title(title));
-				 
-			 }
-			 System.out.println(noteType);
-			 
-		 }
-		 
-		 
-		 mMap.setOnInfoWindowClickListener(this);
-		
-		 tour1.listIterator();
-		
-		 
-		 
-		 //Adding the loop
-		 //mMap.addPolyline((new PolylineOptions()).add(geoPoints.get(0),geoPoints.get(tour1.size()-1)) .width(6) .color(Color.BLUE));
-		
-		 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(copenhagen1,10.0f));
-		
-		 //mMap.addPolyline((new PolylineOptions()).add(copenhagen1,copenhagen2));
-		
-		 mMap.setMyLocationEnabled(true);
-		 mUiSettings.setCompassEnabled(true);
-		
-		 mUiSettings.setRotateGesturesEnabled(true);
-		
-		 mMap.setOnMyLocationChangeListener(new OnMyLocationChangeListener() {
-		
-		 @Override
-		 public void onMyLocationChange(Location location) {
-		 nextNoteEvent(location);
-		
-		 }
-		 });
+		mUiSettings = mMap.getUiSettings();
+
+		// Get the location points for a specific tour
+		List<LatLng> tour1 = new ArrayList<LatLng>();
+		for (int i = 0; i < tour.getTourLocations().size(); i++) {
+			for (int j = 0; j < tour.getTourLocations().size(); j++) {
+				tourLocations location = new tourLocations();
+				location = tour.getTourLocations().get(i);
+				// String indexNumber =
+				// Integer.toString(location.locationIndex);
+				if (location.locationIndex == j) {
+					String latLngLocation = location.location;
+					String[] latLng = latLngLocation.split(";");
+					double lat = Double.parseDouble(latLng[0]);
+					double lng = Double.parseDouble(latLng[1]);
+					LatLng latLngPosition = new LatLng(lat, lng);
+					tour1.add(latLngPosition);
+				}
+			}
+		}
+		// Draw the location points connected to a tour as a overlay
+		List<LatLng> geoPoints = new ArrayList<LatLng>();
+		int geoPointCounter = 0;
+		for (LatLng geoPoint : tour1) {
+			geoPoints.add(geoPoint);
+			if ((geoPointCounter != 0) && (geoPointCounter != tour1.size())) {
+				mMap.addPolyline((new PolylineOptions())
+						.add(geoPoints.get(geoPointCounter - 1),
+								geoPoints.get(geoPointCounter)).width(6)
+						.color(Color.BLUE));
+			}
+			geoPointCounter += 1;
+		}
+
+		for (int i = 0; i < tour.getNoteList().size(); i++) {
+			List<Notes> notesList = new ArrayList<Notes>();
+			notesList = tour.getNoteList();
+			String noteType = notesList.get(i).getClass().getName();
+			if (noteType.equals("com.example.citywalkapplayout.POI")) {
+				POI poiNote = new POI();
+				poiNote = (POI) notesList.get(i);
+				System.out.println("as");
+				String title = poiNote.noteTitle;
+				String location = poiNote.location;
+				String[] latLng = location.split(";");
+				double lat = Double.parseDouble(latLng[0]);
+				double lng = Double.parseDouble(latLng[1]);
+				LatLng notePosition = new LatLng(lat, lng);
+				Marker mark = mMap.addMarker(new MarkerOptions().position(
+						notePosition).title(title));
+			} else if (noteType
+					.equals("com.example.citywalkapplayout.TourNotes")) {
+				TourNotes tourNote = new TourNotes();
+				tourNote = (TourNotes) notesList.get(i);
+				String location = tourNote.location;
+				String title = tourNote.noteTitle;
+				String[] latLng = location.split(";");
+				double lat = Double.parseDouble(latLng[0]);
+				double lng = Double.parseDouble(latLng[1]);
+				LatLng notePosition = new LatLng(lat, lng);
+				Marker mark = mMap.addMarker(new MarkerOptions().position(
+						notePosition).title(title));
+
+			}
+			System.out.println(noteType);
+
+		}
+
+		mMap.setOnInfoWindowClickListener(this);
+
+		tour1.listIterator();
+
+		// Adding the loop
+		// mMap.addPolyline((new
+		// PolylineOptions()).add(geoPoints.get(0),geoPoints.get(tour1.size()-1))
+		// .width(6) .color(Color.BLUE));
+
+		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(copenhagen1, 10.0f));
+
+		// mMap.addPolyline((new
+		// PolylineOptions()).add(copenhagen1,copenhagen2));
+
+		mMap.setMyLocationEnabled(true);
+		mUiSettings.setCompassEnabled(true);
+
+		mUiSettings.setRotateGesturesEnabled(true);
+
+		mMap.setOnMyLocationChangeListener(new OnMyLocationChangeListener() {
+
+			@Override
+			public void onMyLocationChange(Location location) {
+				nextNoteEvent(location);
+
+			}
+		});
 
 	}
 
@@ -204,11 +213,52 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 	@Override
 	public void onInfoWindowClick(Marker marker) {
-		if (marker.getTitle().equals("Marker 1")) {
-			// Intent intent = new Intent(this, Marker1.class);
-			// startActivity(intent);
-		}
+		
+			for (int i = 0; i < tour.getNoteList().size(); i++) {
+				List<Notes> notesList = new ArrayList<Notes>();
+				notesList = tour.getNoteList();
+				
+				String title = null;
+				String description = null;
+				String noteType = notesList.get(i).getClass().getName();
+				if (noteType.equals("com.example.citywalkapplayout.POI")) {
+					POI poiNote = new POI();
+					poiNote = (POI) notesList.get(i);
+					System.out.println("as");
+					title = poiNote.noteTitle;
+					String location = poiNote.location;
+					description = poiNote.description;
+					String[] latLng = location.split(";");
+					double lat = Double.parseDouble(latLng[0]);
+					double lng = Double.parseDouble(latLng[1]);
+					LatLng notePosition = new LatLng(lat, lng);
+					Marker mark = mMap.addMarker(new MarkerOptions().position(
+							notePosition).title(title));
+					
+				} else if (noteType
+						.equals("com.example.citywalkapplayout.TourNotes")) {
+					TourNotes tourNote = new TourNotes();
+					tourNote = (TourNotes) notesList.get(i);
+					String location = tourNote.location;
+					title = tourNote.noteTitle;
+					description = tourNote.description;
+					String[] latLng = location.split(";");
+					double lat = Double.parseDouble(latLng[0]);
+					double lng = Double.parseDouble(latLng[1]);
+					LatLng notePosition = new LatLng(lat, lng);
+					Marker mark = mMap.addMarker(new MarkerOptions().position(
+							notePosition).title(title));
 
+				}
+				if (marker.getTitle().equals(title)) {
+					Intent start = new Intent(this, NoteInfo.class);
+					
+					Bundle b1 = new Bundle();
+					b1.putString("noteDescription", description);
+					start.putExtras(b1);
+					startActivity(start);
+			}
+		}
 	}
 
 }
