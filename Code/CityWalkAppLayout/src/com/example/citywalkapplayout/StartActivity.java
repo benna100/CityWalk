@@ -1,5 +1,7 @@
 package com.example.citywalkapplayout;
 
+import java.util.List;
+
 import android.R.bool;
 import android.os.Bundle;
 import android.app.Activity;
@@ -16,6 +18,7 @@ import android.widget.ListView;
 
 public class StartActivity extends Activity {
 	
+	public static Tour selected;
 	float x = 0;
 	float y = 0;
 	int pos = 0;
@@ -25,11 +28,25 @@ public class StartActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 		
-		PreviewTour tour1 = new PreviewTour("Sight","300m","30min",R.drawable.lakes);
-		PreviewTour tour2 = new PreviewTour("Sight2","600m","60min",R.drawable.mermaid);
-		PreviewTour tour3 = new PreviewTour("Sight2","600m","60min",R.drawable.mermaid);
-		PreviewTour tour4 = new PreviewTour("Sight","300m","30min",R.drawable.lakes);
-		final PreviewTour[] tours = {tour1,tour2,tour3};
+//		final Tour[] tours = {new Tour(),new Tour(),new Tour(),new Tour()};
+//		
+//		for(int i = 0; i < tours.length; i++){
+//			Tour t = tours[i];
+//			t.setTitle("tour "+ i);
+//			t.setImg(R.drawable.mermaid);
+//			t.setDistance("30km");
+//			t.setDuration(90);new Tour()new Tour()new Tour()
+//		}
+		
+		ServerAccessLayer server = new ServerAccessLayer();
+		final List<Tour> tourList = server.getSortedTour("views");
+		final Tour[] tours = new Tour[tourList.size()];
+		for(int i = 0;i < tourList.size(); i++){
+			Tour t = tourList.get(i);
+			t.setImg(R.drawable.mermaid);
+			t.setDistance(300);
+			tours[i] = t;
+		}
 		
 		ListView listView = (ListView) findViewById(R.id.list);
 		
@@ -70,10 +87,11 @@ public class StartActivity extends Activity {
 				            			pos -= 1;
 				            		}
 					            	
-					            	PreviewTour t = tours[pos];
-				            		
-				            		t.setTitle(""+layout.getChildCount());
-	
+					            	selected = tours[pos];
+					            	
+					            	Intent map = new Intent(null, GoogleMapActivity.class);
+					        		startActivity(map);
+					        		
 				  		    	  	adapter.notifyDataSetChanged();
 					            }
 				            }
@@ -83,23 +101,23 @@ public class StartActivity extends Activity {
 	            return true;
 			}
 		});
-		
-//		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//		      @Override
-//		      public void onItemClick(AdapterView<?> parent, final View view,int position, long id) {
-//		    	  final PreviewTour t;
-//		    	  try {
-//		    		  t = (PreviewTour) parent.getItemAtPosition(position+pos);
-//			    	  t.setTitle("" + parent.getCount());
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//		    	  adapter.notifyDataSetChanged();
-//		      }
-//
-//		 });
+//		
+////		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+////
+////		      @Override
+////		      public void onItemClick(AdapterView<?> parent, final View view,int position, long id) {
+////		    	  final PreviewTour t;
+////		    	  try {
+////		    		  t = (PreviewTour) parent.getItemAtPosition(position+pos);
+////			    	  t.setTitle("" + parent.getCount());
+////				} catch (Exception e) {
+////					// TODO Auto-generated catch block
+////					e.printStackTrace();
+////				}
+////		    	  adapter.notifyDataSetChanged();
+////		      }
+////
+////		 });
 	}
 
 	@Override

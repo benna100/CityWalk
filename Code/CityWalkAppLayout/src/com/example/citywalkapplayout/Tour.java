@@ -18,6 +18,8 @@ public class Tour {
 	int duration;
 	int views;
 	double rating;
+	int img;
+	int distance;
 	
 	/*
 	Tour(List<Notes> notes, LocalDate date, int idInput){
@@ -33,6 +35,22 @@ public class Tour {
 		this.dateAdded = LocalDate.now();
 	}
 	*/
+	public int getDistance(){
+		return distance;
+	}
+	
+	public void setDistance(int i){
+		distance = i;
+	}
+	
+	public int getImg(){
+		return img;
+	}
+	
+	public void setImg(int i){
+		img = i;
+	}
+	
 	public void setId(int id){
 		this.id = id;
 	}

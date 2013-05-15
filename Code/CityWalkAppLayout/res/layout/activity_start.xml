@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:background="#4ac925"
-        android:layout_alignParentTop="true" >
+        android:scrollbars="none" >
 
         <LinearLayout
             android:layout_width="match_parent"
