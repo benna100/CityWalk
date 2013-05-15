@@ -1,5 +1,7 @@
 package com.example.citywalkapplayout;
 
+import java.util.List;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +11,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class CityWalkTourAdapter extends ArrayAdapter<PreviewTour>  {
+public class CityWalkTourAdapter extends ArrayAdapter<Tour>  {
 	
 	private final Context context;
-	private final PreviewTour[] tours;
+	private final Tour[] tours;
 
-	public CityWalkTourAdapter(Context context, PreviewTour[] tours) {
+	public CityWalkTourAdapter(Context context,  Tour[] tours) {
 		super(context, R.layout.list_2line, tours);
 		this.context = context;
 		this.tours = tours;
@@ -38,22 +40,22 @@ public class CityWalkTourAdapter extends ArrayAdapter<PreviewTour>  {
 		
 		if(position%2==1){return inflater.inflate(R.layout.empty, parent, false);}
 		
-		PreviewTour tour1 = tours[position];
+		Tour tour1 = tours[position];
 		
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(50,50);
 		
 		title1.setText(tour1.getTitle());
-		time1.setText(tour1.getTime());
-		dist1.setText(tour1.getDist());
+		time1.setText(tour1.getDuration()+" min");
+		dist1.setText(tour1.getDistance()+"m");
 		icon1.setLayoutParams(layoutParams);
 		icon1.setImageResource(tour1.getImg());
 		
 		if(position+1 < tours.length) {
-			PreviewTour tour2 = tours[position+1];
+			Tour tour2 = tours[position+1];
 			
 			title2.setText(tour2.getTitle());
-			time2.setText(tour2.getTime());
-			dist2.setText(tour2.getDist());
+			time2.setText(tour2.getDuration()+" min");
+			dist2.setText(tour2.getDistance()+"m");
 			icon2.setLayoutParams(layoutParams);
 			icon2.setImageResource(tour2.getImg());
 			
