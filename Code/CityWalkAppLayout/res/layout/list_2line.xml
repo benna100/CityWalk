@@ -38,25 +38,6 @@
                 android:id="@+id/ImageView02"
                 android:layout_width="35dp"
                 android:layout_height="25dp"
-                android:src="@drawable/checkeredflag" />
-
-            <TextView
-                android:id="@+id/dist1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-            	android:textColor="#FFFFFF"
-                android:text="300m" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <ImageView
-                android:id="@+id/ImageView01"
-                android:layout_width="35dp"
-                android:layout_height="25dp"
                 android:src="@drawable/stopwatch" />
 
             <TextView
@@ -64,8 +45,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-            	android:textColor="#FFFFFF"
-                android:text="30min" />
+                android:text="300m"
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <RatingBar
+                android:id="@+id/ratingBar1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
     </LinearLayout>
 
@@ -103,7 +96,7 @@
                 android:layout_height="25dp" />
 
             <TextView
-                android:id="@+id/dist2"
+                android:id="@+id/time2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -115,17 +108,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <ImageView
-                android:id="@+id/ImageView04"
-                android:layout_width="35dp"
-                android:layout_height="25dp" />
-
-            <TextView
-                android:id="@+id/time2"
+            <RatingBar
+                android:id="@+id/ratingBar2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textColor="#FFFFFF" />
+                android:visibility="invisible" />
 
         </LinearLayout>
     </LinearLayout>
