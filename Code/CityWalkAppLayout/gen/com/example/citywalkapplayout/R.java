@@ -141,47 +141,53 @@ containing a value of this type.
     public static final class drawable {
         public static final int checkeredflag=0x7f020000;
         public static final int dark_gradient=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
-        public static final int lakes=0x7f020003;
-        public static final int mermaid=0x7f020004;
-        public static final int right_arrow=0x7f020005;
-        public static final int search_icon=0x7f020006;
-        public static final int stopwatch=0x7f020007;
+        public static final int gradient=0x7f020002;
+        public static final int ic_launcher=0x7f020003;
+        public static final int lakes=0x7f020004;
+        public static final int mermaid=0x7f020005;
+        public static final int right_arrow=0x7f020006;
+        public static final int search_icon=0x7f020007;
+        public static final int stopwatch=0x7f020008;
     }
     public static final class id {
-        public static final int FROM_CELL=0x7f040011;
-        public static final int ImageView01=0x7f040017;
-        public static final int ImageView02=0x7f040015;
-        public static final int ImageView04=0x7f04001d;
-        public static final int ImageView05=0x7f04001b;
-        public static final int TO_CELL=0x7f040012;
-        public static final int TRAIN_CELL=0x7f040010;
-        public static final int action_settings=0x7f040020;
+        public static final int FROM_CELL=0x7f040016;
+        public static final int ImageView01=0x7f04001c;
+        public static final int ImageView02=0x7f04001a;
+        public static final int ImageView04=0x7f040022;
+        public static final int ImageView05=0x7f040020;
+        public static final int TO_CELL=0x7f040017;
+        public static final int TRAIN_CELL=0x7f040015;
+        public static final int action_settings=0x7f040025;
         public static final int arrow=0x7f040006;
-        public static final int dist1=0x7f040016;
-        public static final int dist2=0x7f04001c;
-        public static final int horizontalScrollView1=0x7f040008;
+        public static final int backTour=0x7f040013;
+        public static final int dist1=0x7f04001b;
+        public static final int dist2=0x7f040021;
+        public static final int horizontalScrollView1=0x7f04000b;
         public static final int hybrid=0x7f040004;
-        public static final int icon1=0x7f040013;
-        public static final int icon2=0x7f040019;
+        public static final int icon1=0x7f040018;
+        public static final int icon2=0x7f04001e;
         public static final int label=0x7f040005;
-        public static final int list=0x7f04000d;
-        public static final int map=0x7f040007;
-        public static final int menu_settings=0x7f04001f;
+        public static final int list=0x7f040010;
+        public static final int locationText=0x7f04000a;
+        public static final int map=0x7f040008;
+        public static final int map_container=0x7f040007;
+        public static final int menu_settings=0x7f040024;
+        public static final int nextStop=0x7f040009;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
-        public static final int noteDescription=0x7f04000f;
-        public static final int noteTitle=0x7f04000e;
+        public static final int noteDescription=0x7f040012;
+        public static final int noteTitle=0x7f040011;
         public static final int satellite=0x7f040002;
+        public static final int startTourButton=0x7f040014;
         public static final int terrain=0x7f040003;
-        public static final int textView1=0x7f040009;
-        public static final int textView2=0x7f04000a;
-        public static final int textView3=0x7f04000b;
-        public static final int textView4=0x7f04000c;
-        public static final int time1=0x7f040018;
-        public static final int time2=0x7f04001e;
-        public static final int title1=0x7f040014;
-        public static final int title2=0x7f04001a;
+        public static final int textView3=0x7f04000e;
+        public static final int textView4=0x7f04000f;
+        public static final int time1=0x7f04001d;
+        public static final int time2=0x7f040023;
+        public static final int title1=0x7f040019;
+        public static final int title2=0x7f04001f;
+        public static final int tourDescription=0x7f04000d;
+        public static final int tourTitle=0x7f04000c;
     }
     public static final class layout {
         public static final int activity_category=0x7f030000;
@@ -189,9 +195,10 @@ containing a value of this type.
         public static final int activity_main=0x7f030002;
         public static final int activity_note_info=0x7f030003;
         public static final int activity_start=0x7f030004;
-        public static final int copylist_2line=0x7f030005;
-        public static final int empty=0x7f030006;
-        public static final int list_2line=0x7f030007;
+        public static final int activity_tour_info=0x7f030005;
+        public static final int copylist_2line=0x7f030006;
+        public static final int empty=0x7f030007;
+        public static final int list_2line=0x7f030008;
     }
     public static final class menu {
         public static final int activity_main=0x7f080000;
@@ -199,6 +206,7 @@ containing a value of this type.
         public static final int category=0x7f080002;
         public static final int googlemapactivity=0x7f080003;
         public static final int note_info=0x7f080004;
+        public static final int tour_info=0x7f080005;
     }
     public static final class string {
         public static final int action_settings=0x7f050016;
@@ -269,6 +277,7 @@ containing a value of this type.
         public static final int menu_settings=0x7f050013;
         public static final int title_activity_note_info=0x7f050015;
         public static final int title_activity_start=0x7f050014;
+        public static final int title_activity_tour_info=0x7f050017;
     }
     public static final class style {
         /** 

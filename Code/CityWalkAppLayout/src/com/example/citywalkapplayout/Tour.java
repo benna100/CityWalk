@@ -20,6 +20,7 @@ public class Tour {
 	double rating;
 	int img;
 	int distance;
+	String description;
 	
 	/*
 	Tour(List<Notes> notes, LocalDate date, int idInput){
@@ -84,6 +85,13 @@ public class Tour {
 	}
 	public String getTitle(){
 		return this.title;
+	}
+	
+	public void setDescription(String description){
+		this.description = description;
+	}
+	public String getDescription(){
+		return this.description;
 	}
 	
 	public void setDuration(int duration){

@@ -11,6 +11,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/mysql-connector-java-3.0.10-stable-bin.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Anders/Desktop/adt-bundle-windows-x86_64-20130219/sdk/platforms/android-17/android.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/adt-bundle-windows-x86_64/sdk/platforms/android-17/android.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -57,6 +57,10 @@
             android:name="com.example.citywalkapplayout.NoteInfo"
             android:label="@string/title_activity_note_info" >
         </activity>
+        <activity
+            android:name="com.example.citywalkapplayout.TourInfo"
+            android:label="@string/title_activity_tour_info" >
+        </activity>
     </application>
 
 </manifest>

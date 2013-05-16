@@ -40,6 +40,7 @@ public class ServerAccessLayer {
 		String dateAdded = null;
 		String comments = null;
 		String title = null;
+		String description = null;
 		int duration = 0;
 		int views = 0;
 		double rating = 0;
@@ -51,6 +52,7 @@ public class ServerAccessLayer {
 			duration = Integer.parseInt(tourDatabaseObject.getString("duration"));
 			views = Integer.parseInt(tourDatabaseObject.getString("views"));
 			rating = Double.parseDouble(tourDatabaseObject.getString("rating"));
+			description = tourDatabaseObject.getString("description");
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,6 +71,7 @@ public class ServerAccessLayer {
 		tour.setRating(rating);
 		tour.setTitle(title);
 		tour.setViews(views);
+		tour.setDescription(description);
 		
 		return tour;
 	}

@@ -38,7 +38,6 @@ public class StartActivity extends Activity {
 //			t.setDistance("30km");
 //			t.setDuration(90);new Tour()new Tour()new Tour()
 //		}
-
 		
 		ServerAccessLayer server = new ServerAccessLayer();
 		final List<Tour> tourList = server.getSortedTour("views");
@@ -90,9 +89,7 @@ public class StartActivity extends Activity {
 				            		}
 					            	
 					            	selected = tours[pos];
-					            	
-					            	select();
-					        		
+					            	select(selected);
 				  		    	  	adapter.notifyDataSetChanged();
 					            }
 				            }
@@ -121,9 +118,15 @@ public class StartActivity extends Activity {
 ////		 });
 	}
 	
-	public void select(){
-		Intent map = new Intent(this, GoogleMapActivity.class);
-		startActivity(map);
+	public void select(Tour tour){
+		Intent start = new Intent(this, TourInfo.class);
+		String title = tour.title;
+		String description = tour.description;
+		Bundle b1 = new Bundle();
+		b1.putString("tourTitle", title);
+		b1.putString("tourDescription", description);
+		start.putExtras(b1);
+		startActivity(start);
 	}
 
 	@Override
