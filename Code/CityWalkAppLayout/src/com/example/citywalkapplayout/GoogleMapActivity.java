@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -42,20 +43,24 @@ import com.google.android.maps.MapView;
 import android.support.v4.app.FragmentActivity;
 
 public class GoogleMapActivity extends FragmentActivity implements
-		OnMarkerClickListener, OnInfoWindowClickListener {
+		OnMarkerClickListener, OnInfoWindowClickListener, LocationListener {
 
 	private GoogleMap mMap;
 	private static final LatLng copenhagen1 = new LatLng(55.706176, 12.56278);
 	private static final LatLng copenhagen2 = new LatLng(55.709126, 12.577543);
 	private static final LatLng copenhagen3 = new LatLng(55.699647, 12.577114);
 	private static final LatLng copenhagen4 = new LatLng(55.691084, 12.560892);
+	private static final LatLng dtu = new LatLng(55.783344,12.518559);
+	private static final LatLng dtu2 = new LatLng(55.783302,12.51876);
 	private LocationListener mLocationListener;
 	private static final OnMarkerClickListener OnMarkerClickListener = null;
 	private List<LatLng> tour1 = null;
 	private UiSettings mUiSettings;
 	private Tour tour;
+	protected LocationManager locationManager;
+	private LocationListener locationListener;
 	private static final int noteNumber = 0;
-	static TextView LocationText;
+	
 	MapView mapView;
 
 	@Override
@@ -64,35 +69,40 @@ public class GoogleMapActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_googlemapactivity);
 		// Create simple map
 
-		addLocationListener();
+		//addLocationListener();
+		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
+		
 		setupMap();
+//		TextView textView = (TextView) findViewById(R.id.locationText);
+//		float [] dist = new float[1];
+//		Location.distanceBetween(dtu.latitude, dtu.longitude, dtu2.latitude, dtu2.longitude, dist);
+//		textView.setText(Float.toString(dist[0]));
 	}
-	private void addLocationListener(){
-		mLocationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(final Location location) {
-                calculateDistanceToNextPoint(location);
-            }
-            @Override
-            public void onStatusChanged(final String provider,
-                    final int status, final Bundle extras) {
-            }
-
-            @Override
-            public void onProviderEnabled(final String provider) {
-            }
-
-            @Override
-            public void onProviderDisabled(final String provider) {
-            }
-        };
-	}
+	
 
 	protected void calculateDistanceToNextPoint(Location location) {
 		// TODO Auto-generated method stub
 		TextView textView = (TextView) findViewById(R.id.locationText);
 		
+		Location locationKBH = new Location("");
+		locationKBH.setLatitude(dtu.latitude);
+		locationKBH.setAltitude(dtu.longitude);
 		textView.setText(location.toString());
+		//float dist = location.distanceTo(locationKBH);
+		float [] dist = new float[1];
+		Location.distanceBetween(dtu.latitude, dtu.longitude, location.getLatitude(), location.getLongitude(), dist);
+		textView.setText(Float.toString(dist[0]));
+		if (dist[0] < 10.0){
+			Intent intent = new Intent(this, NoteInfo.class);
+			Bundle b1 = new Bundle();
+			String description = "HALLØJSA FLOTTE CLASS";
+			b1.putString("noteDescription", description );
+			intent.putExtras(b1);
+			intent.putExtra("number", noteNumber);
+			startActivity(intent);
+		}
+		
 	}
 	private void setupMap() {
 		if (mMap == null) {
@@ -370,9 +380,30 @@ public class GoogleMapActivity extends FragmentActivity implements
 				Bundle b1 = new Bundle();
 				b1.putString("noteDescription", description);
 				start.putExtras(b1);
+				start.putExtra("number", noteNumber);
 				startActivity(start);
 			}
 		}
+	}
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		calculateDistanceToNextPoint(location);
+	}
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
