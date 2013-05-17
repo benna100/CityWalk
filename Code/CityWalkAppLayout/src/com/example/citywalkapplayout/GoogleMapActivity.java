@@ -89,10 +89,10 @@ public class GoogleMapActivity extends FragmentActivity implements
 	protected void calculateDistanceToNextPoint(Location location) {
 		// TODO Auto-generated method stub
 		TextView textView = (TextView) findViewById(R.id.locationText);
-		Notes note = tour.notesList.get(noteNumber);
+
 		Location locationKBH = new Location("");
-		locationKBH.setLatitude(Double.parseDouble(note.location.split(";")[0]));
-		locationKBH.setAltitude(Double.parseDouble(note.location.split(";")[1]));
+		locationKBH.setLatitude(dtu.latitude);
+		locationKBH.setAltitude(dtu.longitude);
 		textView.setText(location.toString());
 		// float dist = location.distanceTo(locationKBH);
 		float[] dist = new float[1];
