@@ -206,7 +206,7 @@ public class StartActivity extends Activity implements
 		List<Tour> tourList = new ArrayList<Tour>();
 		for (int i = 0; i < fulllist.size(); i++) {
 			Tour t = fulllist.get(i);
-			if (t.getTitle().toLowerCase().contains(arg0.toLowerCase())) {
+			if (t.getTitle().toLowerCase().contains(arg0.toLowerCase()) || t.getDescription().toLowerCase().contains(arg0.toLowerCase())) {
 				tourList.add(t);
 			}
 		}
