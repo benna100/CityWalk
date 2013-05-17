@@ -345,7 +345,6 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 		Bundle b1 = new Bundle();
 		b1.putString("noteDescription", note.description);
-		b1.putString("noteTitle", note.noteTitle);
 		start.putExtras(b1);
 		start.putExtra("number", noteNumber);
 		startActivity(start);
@@ -355,7 +354,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 	public void onInfoWindowClick(Marker marker) {
 		List<Notes> notesList = tour.getNoteList();
 		for (int i = 0; i < tour.getNoteList().size(); i++) {
-			Notes poiNote = (Notes) notesList.get(i);
+			POI poiNote = (POI) notesList.get(i);
 			String title = poiNote.noteTitle;
 			if (marker.getTitle().equals(title)) {
 				displayNodeInfo(i);
