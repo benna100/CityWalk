@@ -372,7 +372,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 		
 		List<Notes> notesList = tour.getNoteList();
 		for (int i = 0; i < tour.getNoteList().size(); i++) {
-			POI poiNote = (POI) notesList.get(i);
+			Notes poiNote = (Notes) notesList.get(i);
 			String title = poiNote.noteTitle;
 			if (marker.getTitle().equals(title)) {
 				displayNodeInfo(i);
