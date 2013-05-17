@@ -17,6 +17,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -60,6 +61,8 @@ public class GoogleMapActivity extends FragmentActivity implements
 	protected LocationManager locationManager;
 	private LocationListener locationListener;
 	private static int noteNumber = 0;
+	private Vibrator vibrator;
+	private boolean[] hasFired;
 
 	MapView mapView;
 
@@ -74,6 +77,8 @@ public class GoogleMapActivity extends FragmentActivity implements
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
 
 		setupMap();
+		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
 		// TextView textView = (TextView) findViewById(R.id.locationText);
 		// float [] dist = new float[1];
 		// Location.distanceBetween(dtu.latitude, dtu.longitude, dtu2.latitude,
@@ -94,15 +99,23 @@ public class GoogleMapActivity extends FragmentActivity implements
 		Location.distanceBetween(dtu.latitude, dtu.longitude,
 				location.getLatitude(), location.getLongitude(), dist);
 		textView.setText(Float.toString(dist[0]));
+		setCamera(new LatLng(location.getLatitude(),location.getLongitude()));
 		if (dist[0] < 10.0) {
-			Intent intent = new Intent(this, NoteInfo.class);
-			Bundle b1 = new Bundle();
-			String description = "HALLØJSA FLOTTE CLASS";
-			b1.putString("noteDescription", description);
-			intent.putExtras(b1);
-			intent.putExtra("number", noteNumber);
-			startActivity(intent);
-			noteNumber++;
+//			Notes note = (Notes) tour.notesList.get(noteNumber);
+//			Intent intent = new Intent(this, NoteInfo.class);
+//			Bundle b1 = new Bundle();
+//			String description = note.description;
+//			b1.putString("noteDescription", description);
+//			intent.putExtras(b1);
+//			intent.putExtra("number", noteNumber);
+//			startActivity(intent);
+			
+			if (!hasFired[noteNumber]) {
+				hasFired[noteNumber] = true;
+				vibrator.vibrate(300);
+			}
+			displayNodeInfo(noteNumber);
+			
 		}
 
 	}
@@ -120,7 +133,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 		// ServerAccessLayer server = new ServerAccessLayer();
 		// tour = server.getTour("2");
 		// server.getSortedTour("rating");
-		setCamera(copenhagen1);
+		//setCamera(copenhagen1);
 		mUiSettings = mMap.getUiSettings();
 
 		// Get the location points for a specific tour
@@ -131,6 +144,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 		// Draw markers for all the notes
 		List<Notes> notesList = tour.getNoteList();
+		
 		for (int i = 0; i < tour.getNoteList().size(); i++) {
 			String noteType = notesList.get(i).getClass().getName();
 			Notes note = notesList.get(i);
@@ -138,7 +152,10 @@ public class GoogleMapActivity extends FragmentActivity implements
 			System.out.println(noteType);
 
 		}
-
+		hasFired = new boolean [notesList.size()];
+		for (int i = 0; i<hasFired.length;i++){
+			hasFired[i]=true;
+		}
 		tourLocations.listIterator();
 
 		enableBasicMapFunctionality();
@@ -148,7 +165,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 	public void enableBasicMapFunctionality() {
 		mMap.setOnInfoWindowClickListener(this);
 
-		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(copenhagen1, 10.0f));
+		setCamera(dtu);
 
 		// mMap.addPolyline((new
 		// PolylineOptions()).add(copenhagen1,copenhagen2));
@@ -207,7 +224,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 	public void setCamera(LatLng latlng) {
 		if (mMap != null) {
-			mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 18.0f));
 		}
 	}
 
@@ -353,6 +370,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 	@Override
 	public void onInfoWindowClick(Marker marker) {
+		
 		List<Notes> notesList = tour.getNoteList();
 		for (int i = 0; i < tour.getNoteList().size(); i++) {
 			Notes poiNote = (Notes) notesList.get(i);
