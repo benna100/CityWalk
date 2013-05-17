@@ -6,6 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/gradient"
     tools:context=".NoteInfo" >
 
     <TextView
@@ -15,17 +16,36 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/nextNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+
+    <Button
+        android:id="@+id/noteInfoBackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/noteDescription"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/noteImage"
+        android:layout_below="@+id/noteTitle"
+        android:layout_marginTop="33dp"/>
+
+    <ImageView
+        android:id="@+id/noteImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/noteTitle"
-        android:layout_marginLeft="17dp"
-        android:layout_marginTop="22dp"
-        android:text="TextView" />
+        android:layout_alignTop="@+id/noteDescription"
+        android:src="@drawable/mermaid" />
 
 </RelativeLayout>

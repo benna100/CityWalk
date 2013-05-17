@@ -17,6 +17,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -50,8 +51,8 @@ public class GoogleMapActivity extends FragmentActivity implements
 	private static final LatLng copenhagen2 = new LatLng(55.709126, 12.577543);
 	private static final LatLng copenhagen3 = new LatLng(55.699647, 12.577114);
 	private static final LatLng copenhagen4 = new LatLng(55.691084, 12.560892);
-	private static final LatLng dtu = new LatLng(55.783344,12.518559);
-	private static final LatLng dtu2 = new LatLng(55.783302,12.51876);
+	private static final LatLng dtu = new LatLng(55.783344, 12.518559);
+	private static final LatLng dtu2 = new LatLng(55.783302, 12.51876);
 	private LocationListener mLocationListener;
 	private static final OnMarkerClickListener OnMarkerClickListener = null;
 	private List<LatLng> tour1 = null;
@@ -59,8 +60,10 @@ public class GoogleMapActivity extends FragmentActivity implements
 	private Tour tour;
 	protected LocationManager locationManager;
 	private LocationListener locationListener;
-	private static final int noteNumber = 0;
-	
+	private static int noteNumber = 0;
+	private Vibrator vibrator;
+	private boolean[] hasFired;
+
 	MapView mapView;
 
 	@Override
@@ -69,41 +72,54 @@ public class GoogleMapActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_googlemapactivity);
 		// Create simple map
 
-		//addLocationListener();
+		// addLocationListener();
 		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
-		
+
 		setupMap();
-//		TextView textView = (TextView) findViewById(R.id.locationText);
-//		float [] dist = new float[1];
-//		Location.distanceBetween(dtu.latitude, dtu.longitude, dtu2.latitude, dtu2.longitude, dist);
-//		textView.setText(Float.toString(dist[0]));
+		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+		// TextView textView = (TextView) findViewById(R.id.locationText);
+		// float [] dist = new float[1];
+		// Location.distanceBetween(dtu.latitude, dtu.longitude, dtu2.latitude,
+		// dtu2.longitude, dist);
+		// textView.setText(Float.toString(dist[0]));
 	}
-	
 
 	protected void calculateDistanceToNextPoint(Location location) {
 		// TODO Auto-generated method stub
 		TextView textView = (TextView) findViewById(R.id.locationText);
-		
+
 		Location locationKBH = new Location("");
 		locationKBH.setLatitude(dtu.latitude);
 		locationKBH.setAltitude(dtu.longitude);
 		textView.setText(location.toString());
-		//float dist = location.distanceTo(locationKBH);
-		float [] dist = new float[1];
-		Location.distanceBetween(dtu.latitude, dtu.longitude, location.getLatitude(), location.getLongitude(), dist);
+		// float dist = location.distanceTo(locationKBH);
+		float[] dist = new float[1];
+		Location.distanceBetween(dtu.latitude, dtu.longitude,
+				location.getLatitude(), location.getLongitude(), dist);
 		textView.setText(Float.toString(dist[0]));
-		if (dist[0] < 10.0){
-			Intent intent = new Intent(this, NoteInfo.class);
-			Bundle b1 = new Bundle();
-			String description = "HALLØJSA FLOTTE CLASS";
-			b1.putString("noteDescription", description );
-			intent.putExtras(b1);
-			intent.putExtra("number", noteNumber);
-			startActivity(intent);
+		setCamera(new LatLng(location.getLatitude(),location.getLongitude()));
+		if (dist[0] < 10.0) {
+//			Notes note = (Notes) tour.notesList.get(noteNumber);
+//			Intent intent = new Intent(this, NoteInfo.class);
+//			Bundle b1 = new Bundle();
+//			String description = note.description;
+//			b1.putString("noteDescription", description);
+//			intent.putExtras(b1);
+//			intent.putExtra("number", noteNumber);
+//			startActivity(intent);
+			
+			if (!hasFired[noteNumber]) {
+				hasFired[noteNumber] = true;
+				vibrator.vibrate(300);
+			}
+			displayNodeInfo(noteNumber);
+			
 		}
-		
+
 	}
+
 	private void setupMap() {
 		if (mMap == null) {
 			mMap = ((SupportMapFragment) getSupportFragmentManager()
@@ -117,7 +133,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 		// ServerAccessLayer server = new ServerAccessLayer();
 		// tour = server.getTour("2");
 		// server.getSortedTour("rating");
-		setCamera(copenhagen1);
+		//setCamera(copenhagen1);
 		mUiSettings = mMap.getUiSettings();
 
 		// Get the location points for a specific tour
@@ -125,9 +141,10 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 		// Draw the location points connected to a tour as a overlay
 		drawOverlay(tourLocations);
-		
+
 		// Draw markers for all the notes
 		List<Notes> notesList = tour.getNoteList();
+		
 		for (int i = 0; i < tour.getNoteList().size(); i++) {
 			String noteType = notesList.get(i).getClass().getName();
 			Notes note = notesList.get(i);
@@ -135,17 +152,20 @@ public class GoogleMapActivity extends FragmentActivity implements
 			System.out.println(noteType);
 
 		}
-		
+		hasFired = new boolean [notesList.size()];
+		for (int i = 0; i<hasFired.length;i++){
+			hasFired[i]=true;
+		}
 		tourLocations.listIterator();
 
 		enableBasicMapFunctionality();
-		
 
 	}
-	public void enableBasicMapFunctionality(){
+
+	public void enableBasicMapFunctionality() {
 		mMap.setOnInfoWindowClickListener(this);
-		
-		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(copenhagen1, 10.0f));
+
+		setCamera(dtu);
 
 		// mMap.addPolyline((new
 		// PolylineOptions()).add(copenhagen1,copenhagen2));
@@ -164,7 +184,8 @@ public class GoogleMapActivity extends FragmentActivity implements
 			}
 		});
 	}
-	public void drawOverlay(List<LatLng> tourLocations){
+
+	public void drawOverlay(List<LatLng> tourLocations) {
 		List<LatLng> geoPoints = new ArrayList<LatLng>();
 		int geoPointCounter = 0;
 		for (LatLng geoPoint : tourLocations) {
@@ -203,7 +224,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 	public void setCamera(LatLng latlng) {
 		if (mMap != null) {
-			mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 18.0f));
 		}
 	}
 
@@ -335,75 +356,52 @@ public class GoogleMapActivity extends FragmentActivity implements
 		return true;
 	}
 
+	public void displayNodeInfo(int noteNumber) {
+		Notes note = tour.getNoteList().get(noteNumber);
+		Intent start = new Intent(this, NoteInfo.class);
+
+		Bundle b1 = new Bundle();
+		b1.putString("noteDescription", note.description);
+		start.putExtras(b1);
+		start.putExtra("number", noteNumber);
+		startActivity(start);
+	}
+
 	@Override
 	public void onInfoWindowClick(Marker marker) {
-
+		
+		List<Notes> notesList = tour.getNoteList();
 		for (int i = 0; i < tour.getNoteList().size(); i++) {
-			List<Notes> notesList = new ArrayList<Notes>();
-			notesList = tour.getNoteList();
-
-			String title = null;
-			String description = null;
-			String noteType = notesList.get(i).getClass().getName();
-			if (noteType.equals("com.example.citywalkapplayout.POI")) {
-				POI poiNote = new POI();
-				poiNote = (POI) notesList.get(i);
-				System.out.println("as");
-				title = poiNote.noteTitle;
-				String location = poiNote.location;
-				description = poiNote.description;
-				String[] latLng = location.split(";");
-				double lat = Double.parseDouble(latLng[0]);
-				double lng = Double.parseDouble(latLng[1]);
-				LatLng notePosition = new LatLng(lat, lng);
-				Marker mark = mMap.addMarker(new MarkerOptions().position(
-						notePosition).title(title));
-
-			} else if (noteType
-					.equals("com.example.citywalkapplayout.TourNotes")) {
-				TourNotes tourNote = new TourNotes();
-				tourNote = (TourNotes) notesList.get(i);
-				String location = tourNote.location;
-				title = tourNote.noteTitle;
-				description = tourNote.description;
-				String[] latLng = location.split(";");
-				double lat = Double.parseDouble(latLng[0]);
-				double lng = Double.parseDouble(latLng[1]);
-				LatLng notePosition = new LatLng(lat, lng);
-				Marker mark = mMap.addMarker(new MarkerOptions().position(
-						notePosition).title(title));
-
-			}
+			Notes poiNote = (Notes) notesList.get(i);
+			String title = poiNote.noteTitle;
 			if (marker.getTitle().equals(title)) {
-				Intent start = new Intent(this, NoteInfo.class);
-
-				Bundle b1 = new Bundle();
-				b1.putString("noteDescription", description);
-				start.putExtras(b1);
-				start.putExtra("number", noteNumber);
-				startActivity(start);
+				displayNodeInfo(i);
 			}
 		}
 	}
+
 	@Override
 	public void onLocationChanged(Location location) {
 		// TODO Auto-generated method stub
 		calculateDistanceToNextPoint(location);
 	}
+
 	@Override
 	public void onProviderDisabled(String provider) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
 	public void onProviderEnabled(String provider) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
