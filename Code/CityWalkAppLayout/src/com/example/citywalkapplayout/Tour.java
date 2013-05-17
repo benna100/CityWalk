@@ -21,6 +21,7 @@ public class Tour {
 	int img;
 	int distance;
 	String description;
+	List<String> categories;
 	
 	/*
 	Tour(List<Notes> notes, LocalDate date, int idInput){
@@ -114,6 +115,14 @@ public class Tour {
 	public double getRating(){
 		return this.rating;
 	}
+	
+	public void setCategories(List<String> categories){
+		this.categories = categories;
+	}
+	public List<String> getCategories(){
+		return this.categories;
+	}
+	
 }
 
 

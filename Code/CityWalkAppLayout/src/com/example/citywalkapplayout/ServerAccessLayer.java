@@ -32,7 +32,7 @@ import android.widget.TextView;
 public class ServerAccessLayer {
 	 
 	public Tour getTour(String tourId){
-		
+		List<String> categories = getCategoriesList(tourId);
 		List<Notes> noteList = getNotesList(tourId);
 		List<tourLocations> tourLocations = getTourLocations(tourId);
 		JSONObject tourDatabaseObject = getTourFromDatabase(tourId);
@@ -72,9 +72,35 @@ public class ServerAccessLayer {
 		tour.setTitle(title);
 		tour.setViews(views);
 		tour.setDescription(description);
+		tour.setCategories(categories);
 		
 		return tour;
 	}
+	
+	public List<String> getCategoriesList(String tourId){
+		
+		String notes;
+		String query = "select * from tourCategories where tourId=" + tourId;
+		JSONArray finalResult = sendQuery(query);
+		
+		List<String> categoryList = new ArrayList<String>();
+		for (int i=0; i<finalResult.length(); i++) {
+		    	JSONObject jsonNote;
+		    	String category = null;
+				try {
+					jsonNote = finalResult.getJSONObject(i);
+					category = jsonNote.getString("tourCategory");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				categoryList.add(category);
+		}
+		
+		return categoryList;
+	}
+	
+	
+	
 	
 	public List<Notes> getNotesList(String tourId){
 		
@@ -88,8 +114,6 @@ public class ServerAccessLayer {
 		List<Notes> noteList = new ArrayList<Notes>();
 		for (int i=0; i<finalResult.length(); i++) {
 		    try {
-		    	
-		    	
 		    	JSONObject jsonNote = finalResult.getJSONObject(i);
 		    	if(jsonNote.getString("noteType").equals("POI")){
 		    		String title = jsonNote.getString("title");
@@ -133,16 +157,7 @@ public List<tourLocations> getTourLocations(String tourId){
 		
 		String notes;
 		String query = "select * from tourLocationPoints where tourId=" + tourId;
-		//notes = sendQuery(query);
-		
-		//JSONTokener tokener = new JSONTokener(notes);
-		
-		
-		//tour = sendQuery(query);
-		
-				//JSONTokener tokener = new JSONTokener(tour);
-				JSONArray finalResult = sendQuery(query);
-		
+		JSONArray finalResult = sendQuery(query);
 		
 		List<tourLocations> locationPoints = new ArrayList<tourLocations>();
 		for (int i=0; i<finalResult.length(); i++) {
@@ -152,7 +167,6 @@ public List<tourLocations> getTourLocations(String tourId){
 		    	String locationIndexString = jsonNote.getString("locationIndex");
 		    	int locationIndex = Integer.parseInt(locationIndexString);
 		    	
-		    		
 		    	tourLocations locations = new tourLocations();
 		    	locations.setLcation(location);
 		    	locations.setLocationIndex(locationIndex);		    		
