@@ -63,12 +63,9 @@ public class StartActivity extends Activity implements
 		lastSort = findViewById(R.id.viewed);
 		lastSort.setBackgroundResource(R.drawable.blue);
 
-		for (int i = 0; i < fulllist.size(); i++) {
-			Tour t = fulllist.get(i);
-			tours.add(t);
-		}
+		tours.addAll(fulllist);
 
-		filterlist = fulllist;
+		filterlist.addAll(fulllist);;
 
 		// });
 
@@ -190,51 +187,66 @@ public class StartActivity extends Activity implements
 
 	public void sort() {
 		List<Tour> tourList = new ArrayList<Tour>();
-		//View sort
-		viewlist = fulllist;
+		
+		//initiate
+		viewlist.addAll(fulllist);
+		ratelist.addAll(fulllist);
+		datelist.addAll(fulllist);
+		proxlist.addAll(fulllist);
+		
+		// View sort
 		while (!viewlist.isEmpty()) {
 			int v = 0;
 			Tour t = null;
 			for (int i = 0; i < viewlist.size(); i++) {
 				Tour temp = viewlist.get(i);
+				if (temp.equals(null)) {
+					continue;
+				}
 				int vtemp = temp.getViews();
 				if (vtemp > v) {
 					t = temp;
 					v = vtemp;
 				}
 			}
-			tourList.add(t);
+
+			if (t != null) {
+				tourList.add(t);
+			}
 			viewlist.remove(t);
 		}
 		viewlist = tourList;
-		
-		//Rate sort
+		fulllist = viewlist;
+
+		// Rate sort
 		tourList.clear();
-		ratelist = fulllist;
 		while (!ratelist.isEmpty()) {
 			double r = 0;
 			Tour t = null;
 			for (int i = 0; i < ratelist.size(); i++) {
 				Tour temp = ratelist.get(i);
+				if (temp.equals(null)) {
+					continue;
+				}
 				double rtemp = temp.getRating();
 				if (rtemp > r) {
 					t = temp;
 					r = rtemp;
 				}
 			}
-			tourList.add(t);
+			if (t != null) {
+				tourList.add(t);
+			}
 			ratelist.remove(t);
 			// tourList = server.getSortedTour("rating");
 		}
 		ratelist = tourList;
+
+		// Date sort
+
+		// Proximity sort
 		
-		//Date sort
-		tourList.clear();
-		datelist = fulllist;
-		
-		//Proximity sort
-		tourList.clear();
-		proxlist = fulllist;
+		fulllist = viewlist;
 	}
 
 	public void sortSelect(View view) {
@@ -242,9 +254,9 @@ public class StartActivity extends Activity implements
 		view.setBackgroundResource(R.drawable.blue);
 		lastSort = view;
 
-		if(view.getId() == R.id.viewed){
+		if (view.getId() == R.id.viewed) {
 			fulllist = viewlist;
-		}else if(view.getId() == R.id.rated){
+		} else if (view.getId() == R.id.rated) {
 			fulllist = ratelist;
 		}
 
@@ -388,9 +400,9 @@ public class StartActivity extends Activity implements
 					// This value is going to be passed to the
 					// onProgressUpdate() method.
 					publishProgress(70);
-					
+
 					sort();
-					
+
 					publishProgress(100);
 
 				}
