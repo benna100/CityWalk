@@ -35,13 +35,14 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 		this.tours = tours;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(R.layout.list_2line, parent, false);
-		TextView time1 = (TextView) rowView.findViewById(R.id.time1);
-		TextView time2 = (TextView) rowView.findViewById(R.id.time2);
+		TextView views1 = (TextView) rowView.findViewById(R.id.views1);
+		TextView views2 = (TextView) rowView.findViewById(R.id.views2);
 		TextView title1 = (TextView) rowView.findViewById(R.id.title1);
 		TextView title2 = (TextView) rowView.findViewById(R.id.title2);
 		ImageView icon1 = (ImageView) rowView.findViewById(R.id.icon1);
@@ -75,7 +76,7 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 				50, 50);
 
 		title1.setText(tour1.getTitle());
-		time1.setText(tour1.getDuration() + " min");
+		views1.setText(tour1.getViews() + " views");
 		icon1.setLayoutParams(layoutParams);
 		bar1.setRating((float) tour1.getRating());
 
@@ -94,11 +95,11 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 			Tour tour2 = tours.get(position + 1);
 
 			title2.setText(tour2.getTitle());
-			time2.setText(tour2.getDuration() + " min");
+			views2.setText(tour2.getViews() + " views");
 			icon2.setLayoutParams(layoutParams);
 			bar2.setVisibility(View.VISIBLE);
 			bar2.setRating((float) tour2.getRating());
-			img2.setImageResource(R.drawable.stopwatch);
+			img2.setImageResource(R.drawable.viewsicon);
 			
 			try {
 				urlImage = drawableFromUrl(tour2.getImageUrl());

@@ -63,13 +63,25 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/alpha"
-                android:layout_width="177dp"
+                android:id="@+id/latest"
+                android:layout_width="96dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
                 android:gravity="center"
                 android:onClick="sort"
-                android:text="Alphabetically"
+                android:text="Latest"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/near"
+                android:layout_width="164dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="sort"
+                android:text="Closest To You"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFFFF"
                 android:textSize="20dp" />
