@@ -34,6 +34,7 @@ public class NoteInfo extends Activity {
 	Button noteInfoBackButton;
 	private int noteNumber;
 	private boolean finish;
+	private String type;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +46,12 @@ public class NoteInfo extends Activity {
 		String notDescriptionString = b.getString("noteDescription");
 		String imageUrl = b.getString("imageUrl");
 		noteNumber = b.getInt("noteNumber");
-		finish = b.getBoolean("finish");
+		//finish = b.getBoolean("finish");
+		type = b.getString("type");
 
 		nextNote = (Button) findViewById(R.id.nextNote);
 		noteInfoBackButton = (Button) findViewById(R.id.noteInfoBackButton);
-		nextNote.setText("Next sight");
+		nextNote.setText("Continue");
 		nextNote.setTextColor(Color.parseColor("#FFFFFF"));
 		noteInfoBackButton.setTextColor(Color.parseColor("#FFFFFF"));
 		noteInfoBackButton.setText("Back to map");
@@ -128,15 +130,25 @@ public class NoteInfo extends Activity {
 	}
 
 	public void nextNote() {
-		if (finish) {
+		if (type.contains("finish")) {
 			Intent start = new Intent(this, FinishActivity.class);
-			startActivity(start);
-		} else {
+			startActivity(start);	
+		} else if (type.contains( "location")){
 			Intent start = new Intent(this, GoogleMapActivity.class);
 			Bundle b1 = new Bundle();
+			
 			noteNumber++;
 			b1.putInt("noteNumber", noteNumber);
+			b1.putInt("hasFired", noteNumber);
 			start.putExtras(b1);
+			startActivity(start);
+		}
+		else {
+			Intent start = new Intent(this, GoogleMapActivity.class);
+			Bundle b1 = new Bundle();
+			int hasFired = noteNumber+1;
+			b1.putInt("noteNumber", noteNumber);
+			b1.putInt("hasFired", hasFired);
 			startActivity(start);
 		}
 	}
