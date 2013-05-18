@@ -11,7 +11,7 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_center="true"
+        android:layout_centerInParent="true"
         android:minHeight="152dip"
         android:minWidth="152dp" />
 
