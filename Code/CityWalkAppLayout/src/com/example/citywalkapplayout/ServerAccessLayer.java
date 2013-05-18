@@ -285,7 +285,7 @@ public List<tourLocations> getTourLocations(String tourId){
 		
 		String tour;
 		
-		String query = "select * from tour ORDER BY " + orderAttribute;
+		String query = "select * from tour ORDER BY " + orderAttribute + " desc";
 		
 		//tour = sendQuery(query);
 		

@@ -11,6 +11,7 @@ import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,10 +38,13 @@ public class StartActivity extends Activity implements
 	int pos = 0;
 	List<Tour> tours = new ArrayList<Tour>();
 	List<Tour> fulllist = new ArrayList<Tour>();
+	List<Tour> filterlist = new ArrayList<Tour>();
+	ServerAccessLayer server = new ServerAccessLayer();
 	CityWalkTourAdapter adapter;
 
 	private SearchView mSearchView;
 	private TextView mStatusView;
+	Spinner categories;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,6 @@ public class StartActivity extends Activity implements
 		// t.setDuration(90);new Tour()new Tour()new Tour()
 		// }
 
-		ServerAccessLayer server = new ServerAccessLayer();
 		List<Tour> tourList = server.getSortedTour("views");
 		for (int i = 0; i < tourList.size(); i++) {
 			Tour t = tourList.get(i);
@@ -65,6 +68,8 @@ public class StartActivity extends Activity implements
 			tours.add(t);
 			fulllist.add(t);
 		}
+
+		filterlist = fulllist;
 
 		HorizontalScrollView sorter = (HorizontalScrollView) findViewById(R.id.sorter);
 		// sorter.setOnTouchListener(new OnTouchListener() {
@@ -80,34 +85,45 @@ public class StartActivity extends Activity implements
 		// });
 
 		ListView listView = (ListView) findViewById(R.id.list);
-		Spinner categories = (Spinner) findViewById(R.id.categories);
+		categories = (Spinner) findViewById(R.id.categories);
 		categories.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int pos, long id) {
-				List<Tour> tourList = new ArrayList<Tour>();
-				for (int i = 0; i < fulllist.size(); i++) {
-					Tour t = fulllist.get(i);
-					List<String> c = t.getCategories();
-					if (pos == 0){
-						tourList.add(t);
-					}else if (c.contains(parent.getItemAtPosition(pos).toString())) {
-						tourList.add(t);
-					}
-				}
-				
-				adapter.clear();
-				adapter.addAll(tourList);
-				adapter.notifyDataSetChanged();
-				
-				
+				String sel = parent.getSelectedItem().toString();
+				categorize(sel, pos);
+				// List<Tour> tourList = new ArrayList<Tour>();
+				// if (pos == 0) {
+				// tourList = fulllist;
+				// } else {
+				// for (int i = 0; i < fulllist.size(); i++) {
+				// Tour t = fulllist.get(i);
+				// List<String> c = t.getCategories();
+				// if (c.contains(sel)) {
+				// tourList.add(t);
+				// }
+				// }
+				// }
+				//
+				// filterlist = tourList;
+				//
+				// // adapter.clear();
+				// // adapter.addAll(tourList);
+				// // adapter.notifyDataSetChanged();
+				//
+				// if (mSearchView != null) {
+				// String s = mSearchView.getQuery().toString();
+				//
+				// if (s != null) {
+				// search(s);
+				// }
+				// }
+
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 
@@ -149,7 +165,7 @@ public class StartActivity extends Activity implements
 								selected = tours.get(pos);
 								select(selected);
 
-								adapter.notifyDataSetChanged();
+								// adapter.notifyDataSetChanged();
 							}
 						}
 					}
@@ -170,7 +186,6 @@ public class StartActivity extends Activity implements
 		// // t = (PreviewTour) parent.getItemAtPosition(position+pos);
 		// // t.setTitle("" + parent.getCount());
 		// // } catch (Exception e) {
-		// // // TODO Auto-generated catch block
 		// // e.printStackTrace();
 		// // }
 		// // adapter.notifyDataSetChanged();
@@ -179,19 +194,100 @@ public class StartActivity extends Activity implements
 		// // });
 	}
 
+	public void search(String s) {
+		mSearchView.setQuery(s, true);
+	}
+
 	public void select(Tour tour) {
 		Intent start = new Intent(this, TourInfo.class);
 		String title = tour.title;
 		String description = tour.description;
+		String imageUrl = tour.getImageUrl();
 		Bundle b1 = new Bundle();
 		b1.putString("tourTitle", title);
 		b1.putString("tourDescription", description);
+		b1.putString("imageUrl", imageUrl);
 		start.putExtras(b1);
 		startActivity(start);
 	}
-	
-	public void sort(View v){
-		
+
+	public void categorize(String sel, int pos) {
+		List<Tour> tourList = new ArrayList<Tour>();
+		if (pos == 0) {
+			tourList = fulllist;
+		} else {
+			for (int i = 0; i < fulllist.size(); i++) {
+				Tour t = fulllist.get(i);
+				List<String> c = t.getCategories();
+				if (c.contains(sel)) {
+					tourList.add(t);
+				}
+			}
+		}
+
+		filterlist = tourList;
+
+		adapter.clear();
+		adapter.addAll(tourList);
+		adapter.notifyDataSetChanged();
+
+		if (mSearchView != null) {
+			String s = mSearchView.getQuery().toString();
+
+			if (s != null) {
+				search(s);
+			}
+		}
+	}
+
+	public void sort(View view) {
+
+		List<Tour> tourList = new ArrayList<Tour>();
+		if (view.getId() == R.id.viewed) {
+			while (!fulllist.isEmpty()) {
+				int v = 0;
+				Tour t = null;
+				for (int i = 0; i < fulllist.size(); i++) {
+					Tour temp = fulllist.get(i);
+					int vtemp = temp.getViews();
+					if (vtemp > v) {
+						t = temp;
+						v = vtemp;
+					}
+				}
+				tourList.add(t);
+				fulllist.remove(t);
+			}
+			// tourList = server.getSortedTour("views");
+		} else if (view.getId() == R.id.rated) {
+			while (!fulllist.isEmpty()) {
+				double r = 0;
+				Tour t = null;
+				for (int i = 0; i < fulllist.size(); i++) {
+					Tour temp = fulllist.get(i);
+					double rtemp = temp.getRating();
+					if (rtemp > r) {
+						t = temp;
+						r = rtemp;
+					}
+				}
+				tourList.add(t);
+				fulllist.remove(t);
+			}
+			// tourList = server.getSortedTour("rating");
+		} else if (view.getId() == R.id.alpha) {
+
+			// tourList = server.getSortedTour("title");
+		}
+
+		fulllist = tourList;
+
+		adapter.clear();
+		adapter.addAll(tourList);
+		adapter.notifyDataSetChanged();
+
+		categorize(categories.getSelectedItem().toString(),
+				categories.getSelectedItemPosition());
 	}
 
 	@Override
@@ -239,19 +335,18 @@ public class StartActivity extends Activity implements
 	@Override
 	public boolean onQueryTextChange(String arg0) {
 		List<Tour> tourList = new ArrayList<Tour>();
-		for (int i = 0; i < fulllist.size(); i++) {
-			Tour t = fulllist.get(i);
-			if (t.getTitle().toLowerCase().contains(arg0.toLowerCase()) || t.getDescription().toLowerCase().contains(arg0.toLowerCase())) {
-				tourList.add(t);
+		if (arg0.equals("")) {
+			tourList = filterlist;
+		} else {
+			for (int i = 0; i < filterlist.size(); i++) {
+				Tour t = filterlist.get(i);
+				if (t.getTitle().toLowerCase().contains(arg0.toLowerCase())
+						|| t.getDescription().toLowerCase()
+								.contains(arg0.toLowerCase())) {
+					tourList.add(t);
+				}
 			}
 		}
-		// int i;
-		// for(i = 0; i < tourList.size(); i++){
-		// tours[i] = tourList.get(i);
-		// }
-		// for(int j = i; j < fulllist.length; j++){
-		// tours[j]
-		// }
 		adapter.clear();
 		adapter.addAll(tourList);
 		adapter.notifyDataSetChanged();
@@ -260,8 +355,20 @@ public class StartActivity extends Activity implements
 
 	@Override
 	public boolean onQueryTextSubmit(String arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		List<Tour> tourList = new ArrayList<Tour>();
+		for (int i = 0; i < filterlist.size(); i++) {
+			Tour t = filterlist.get(i);
+			if (t.getTitle().toLowerCase().contains(arg0.toLowerCase())
+					|| t.getDescription().toLowerCase()
+							.contains(arg0.toLowerCase())) {
+				tourList.add(t);
+			}
+		}
+
+		adapter.clear();
+		adapter.addAll(tourList);
+		adapter.notifyDataSetChanged();
+		return true;
 	}
 
 	protected boolean isAlwaysExpanded() {
