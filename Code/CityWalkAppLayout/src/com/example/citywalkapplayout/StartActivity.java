@@ -32,6 +32,11 @@ public class StartActivity extends Activity implements
 	static List<Tour> fulllist = new ArrayList<Tour>();
 	static boolean firstTime = true;
 
+	static List<Tour> viewlist = new ArrayList<Tour>();
+	static List<Tour> ratelist = new ArrayList<Tour>();
+	static List<Tour> datelist = new ArrayList<Tour>();
+	static List<Tour> proxlist = new ArrayList<Tour>();
+
 	List<Tour> tours = new ArrayList<Tour>();
 	List<Tour> filterlist = new ArrayList<Tour>();
 	ServerAccessLayer server = new ServerAccessLayer();
@@ -116,14 +121,14 @@ public class StartActivity extends Activity implements
 
 								int w = view.getWidth();
 								if (x < w / 2 | pos > un & uneven) {
-//									view.setBackgroundResource(R.drawable.blue);
+									// view.setBackgroundResource(R.drawable.blue);
 									pos -= 1;
 								}
 
 								selected = tours.get(pos);
-//								selected.setTitle("SELECTED!!!");
-//
-//								adapter.notifyDataSetChanged();
+								// selected.setTitle("SELECTED!!!");
+								//
+								// adapter.notifyDataSetChanged();
 
 								select(selected);
 
@@ -183,49 +188,68 @@ public class StartActivity extends Activity implements
 		}
 	}
 
-	public void sort(View view) {
+	public void sort() {
+		List<Tour> tourList = new ArrayList<Tour>();
+		//View sort
+		viewlist = fulllist;
+		while (!viewlist.isEmpty()) {
+			int v = 0;
+			Tour t = null;
+			for (int i = 0; i < viewlist.size(); i++) {
+				Tour temp = viewlist.get(i);
+				int vtemp = temp.getViews();
+				if (vtemp > v) {
+					t = temp;
+					v = vtemp;
+				}
+			}
+			tourList.add(t);
+			viewlist.remove(t);
+		}
+		viewlist = tourList;
+		
+		//Rate sort
+		tourList.clear();
+		ratelist = fulllist;
+		while (!ratelist.isEmpty()) {
+			double r = 0;
+			Tour t = null;
+			for (int i = 0; i < ratelist.size(); i++) {
+				Tour temp = ratelist.get(i);
+				double rtemp = temp.getRating();
+				if (rtemp > r) {
+					t = temp;
+					r = rtemp;
+				}
+			}
+			tourList.add(t);
+			ratelist.remove(t);
+			// tourList = server.getSortedTour("rating");
+		}
+		ratelist = tourList;
+		
+		//Date sort
+		tourList.clear();
+		datelist = fulllist;
+		
+		//Proximity sort
+		tourList.clear();
+		proxlist = fulllist;
+	}
+
+	public void sortSelect(View view) {
 		lastSort.setBackgroundResource(R.drawable.dark_gradient);
 		view.setBackgroundResource(R.drawable.blue);
 		lastSort = view;
-		List<Tour> tourList = new ArrayList<Tour>();
-		if (view.getId() == R.id.viewed) {
-			while (!fulllist.isEmpty()) {
-				int v = 0;
-				Tour t = null;
-				for (int i = 0; i < fulllist.size(); i++) {
-					Tour temp = fulllist.get(i);
-					int vtemp = temp.getViews();
-					if (vtemp > v) {
-						t = temp;
-						v = vtemp;
-					}
-				}
-				tourList.add(t);
-				fulllist.remove(t);
-			}
-			// tourList = server.getSortedTour("views");
-		} else if (view.getId() == R.id.rated) {
-			while (!fulllist.isEmpty()) {
-				double r = 0;
-				Tour t = null;
-				for (int i = 0; i < fulllist.size(); i++) {
-					Tour temp = fulllist.get(i);
-					double rtemp = temp.getRating();
-					if (rtemp > r) {
-						t = temp;
-						r = rtemp;
-					}
-				}
-				tourList.add(t);
-				fulllist.remove(t);
-			}
-			// tourList = server.getSortedTour("rating");
+
+		if(view.getId() == R.id.viewed){
+			fulllist = viewlist;
+		}else if(view.getId() == R.id.rated){
+			fulllist = ratelist;
 		}
 
-		fulllist = tourList;
-
 		adapter.clear();
-		adapter.addAll(tourList);
+		adapter.addAll(fulllist);
 		adapter.notifyDataSetChanged();
 
 		categorize(categories.getSelectedItem().toString(),
@@ -363,6 +387,10 @@ public class StartActivity extends Activity implements
 					// Set the current progress.
 					// This value is going to be passed to the
 					// onProgressUpdate() method.
+					publishProgress(70);
+					
+					sort();
+					
 					publishProgress(100);
 
 				}
