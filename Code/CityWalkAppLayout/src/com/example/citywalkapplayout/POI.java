@@ -34,4 +34,11 @@ public class POI extends Notes {
 		return this.link;
 	}
 	
+	public void setImageUrl(String url){
+				this.imageUrl = url;
+			}
+			public String getImageUrl(){
+				return this.imageUrl;
+			}
+	
 }

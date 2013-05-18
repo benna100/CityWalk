@@ -25,4 +25,11 @@ public class TourNotes extends Notes {
 		return this.location;
 	}
 	
+	public void setImageUrl(String url){
+			this.imageUrl = url;
+			}
+			public String getImageUrl(){
+				return this.imageUrl;
+			}
+	
 }

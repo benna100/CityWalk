@@ -22,6 +22,7 @@ public class Tour {
 	int distance;
 	String description;
 	List<String> categories;
+	String imageUrl;
 	
 	/*
 	Tour(List<Notes> notes, LocalDate date, int idInput){
@@ -122,6 +123,13 @@ public class Tour {
 	public List<String> getCategories(){
 		return this.categories;
 	}
+	
+	public void setImageUrl(String imageUrl){
+				this.imageUrl = imageUrl;
+		}
+			public String getImageUrl(){
+				return this.imageUrl;
+			}
 	
 }
 
