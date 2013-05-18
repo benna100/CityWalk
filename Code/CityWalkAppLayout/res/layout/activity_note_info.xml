@@ -42,10 +42,10 @@
 
     <ImageView
         android:id="@+id/noteImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="95dp"
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/noteDescription"
-        android:src="@drawable/mermaid" />
+         />
 
 </RelativeLayout>

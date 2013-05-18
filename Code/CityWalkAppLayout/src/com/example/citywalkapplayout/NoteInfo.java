@@ -1,5 +1,10 @@
 package com.example.citywalkapplayout;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import com.google.android.gms.plus.model.people.Person.Image;
 
 import android.os.Bundle;
@@ -11,8 +16,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ImageView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.SpannableString;
@@ -34,6 +42,7 @@ Button noteInfoBackButton;
 		
 		String noteTitleString = b.getString("noteTitle");
 		String notDescriptionString = b.getString("noteDescription");
+		String imageUrl = b.getString("imageUrl");
 		
 		nextNote = (Button)findViewById(R.id.nextNote);
 		noteInfoBackButton = (Button)findViewById(R.id.noteInfoBackButton);
@@ -51,19 +60,29 @@ Button noteInfoBackButton;
 		//noteDescription.setText(notDescriptionString);
 		//noteDescription.setTextColor(Color.parseColor("#FFFFFF"));
 		
+		Drawable urlImage = null;
+				try {
+					urlImage = drawableFromUrl(imageUrl);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.out.println("un here");
+				}
 		
-		Drawable dIcon = getResources().getDrawable(R.drawable.mermaid);
+		//Drawable dIcon = getResources().getDrawable(R.drawable.mermaid);
         
 		//Drawable dIcon = getResources().getDrawable(R.drawable.noteImage);
         
-		int leftMargin = dIcon.getIntrinsicWidth()+70;
-
+		//int leftMargin = dIcon.getIntrinsicWidth()+70;
+		int leftMargin = 320;
         ImageView icon = (ImageView) findViewById(R.id.noteImage);
-        icon.setBackgroundDrawable(dIcon);
+        //icon.setBackgroundDrawable(dIcon);
+    	icon.setBackgroundDrawable(urlImage);
+        //icon.setBackgroundDrawable(dIcon);
 
         SpannableString ss = new SpannableString("asd ka skd aks dkj kjas dk askd jas kd kas dkjas dkj askjd kjas dkj aksjd kjas dkja skjd akjs dkjas dk askd kas dk askjd aksj dkjas dkja skdj aksjd kjasdnjas k");
         //SpannableString ss = new SpannableString(notDescriptionString);
-        ss.setSpan(new MyLeadingMarginSpan2(3, leftMargin), 0, ss.length(), 0);
+        ss.setSpan(new MyLeadingMarginSpan2(5, leftMargin), 0, ss.length(), 0);
 
         noteDescription = (TextView) findViewById(R.id.noteDescription);
         noteDescription.setTextColor(Color.parseColor("#FFFFFF"));
@@ -87,6 +106,17 @@ Button noteInfoBackButton;
 		
 		
 	}
+	
+	public static Drawable drawableFromUrl(String url) throws IOException {
+			    Bitmap x;
+		
+			    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+			    connection.connect();
+		    InputStream input = connection.getInputStream();
+	
+		    x = BitmapFactory.decodeStream(input);
+		    return new BitmapDrawable(x);
+			}
 	
 	public void backToMap(){
 		Intent start = new Intent(this, GoogleMapActivity.class);

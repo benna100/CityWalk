@@ -6,6 +6,7 @@ public abstract class Notes {
 	String noteTitle;
 	String description;
 	String location;
+	String imageUrl;
 	
 	abstract void setTitle(String title);
 	abstract String getTitle();
@@ -15,5 +16,8 @@ public abstract class Notes {
 	
 	abstract void setLocation(String location);
 	abstract String getLocation();
+	
+	abstract void setImageUrl(String url);
+	abstract String getImageUrl();
 	
 }

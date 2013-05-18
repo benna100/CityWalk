@@ -74,7 +74,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 		// addLocationListener();
 		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 1, this);
 
 		setupMap();
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -118,6 +118,12 @@ public class GoogleMapActivity extends FragmentActivity implements
 			
 		}
 
+	}
+	public LatLng convertLocationToLatLng(String location){
+		
+		LatLng newLocation = new LatLng(Double.parseDouble(location.split(";")[0]),Double.parseDouble(location.split(";")[1]) );
+		return newLocation;
+		
 	}
 
 	private void setupMap() {
@@ -165,7 +171,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 	public void enableBasicMapFunctionality() {
 		mMap.setOnInfoWindowClickListener(this);
 
-		setCamera(dtu);
+		setCamera(convertLocationToLatLng(tour.getNoteList().get(noteNumber).location));
 
 		// mMap.addPolyline((new
 		// PolylineOptions()).add(copenhagen1,copenhagen2));
@@ -361,7 +367,9 @@ public class GoogleMapActivity extends FragmentActivity implements
 		Intent start = new Intent(this, NoteInfo.class);
 
 		Bundle b1 = new Bundle();
+		b1.putString("noteTitle", note.noteTitle);
 		b1.putString("noteDescription", note.description);
+		b1.putString("imageUrl", note.imageUrl);
 		start.putExtras(b1);
 		start.putExtra("number", noteNumber);
 		startActivity(start);
