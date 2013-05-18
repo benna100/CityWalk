@@ -61,7 +61,6 @@ public class StartActivity extends Activity implements
 		List<Tour> tourList = server.getSortedTour("views");
 		for (int i = 0; i < tourList.size(); i++) {
 			Tour t = tourList.get(i);
-			t.setImg(R.drawable.mermaid);
 			t.setDistance(300);
 			tours.add(t);
 			fulllist.add(t);

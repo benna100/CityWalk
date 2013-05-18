@@ -1,9 +1,19 @@
 package com.example.citywalkapplayout;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -12,17 +22,17 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-public class CityWalkTourAdapter extends ArrayAdapter<Tour>  {
-	
+public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
+
 	private final Context context;
 	private final List<Tour> tours;
 
-	public CityWalkTourAdapter(Context context,  List<Tour> tours) {
+	public CityWalkTourAdapter(Context context, List<Tour> tours) {
 		super(context, R.layout.list_2line, tours);
 		this.context = context;
 		this.tours = tours;
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context
@@ -36,32 +46,65 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour>  {
 		ImageView icon2 = (ImageView) rowView.findViewById(R.id.icon2);
 		ImageView img2 = (ImageView) rowView.findViewById(R.id.ImageView05);
 		RatingBar bar2 = (RatingBar) rowView.findViewById(R.id.ratingBar2);
-		
-		if(position%2==1){return inflater.inflate(R.layout.empty, parent, false);}
-		
-		Tour tour1 = tours.get(position);
-		
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(50,50);
-		
-		title1.setText(tour1.getTitle());
-		time1.setText(tour1.getDuration()+" min");
-		icon1.setLayoutParams(layoutParams);
-		icon1.setImageResource(tour1.getImg());
-		
-		if(position+1 < tours.size()) {
-			Tour tour2 = tours.get(position+1);
-			
-			title2.setText(tour2.getTitle());
-			time2.setText(tour2.getDuration()+" min");
-			icon2.setLayoutParams(layoutParams);
-			icon2.setImageResource(tour2.getImg());
-//			bar2.setVisibility(View.VISIBLE);
-			
-			img2.setImageResource(R.drawable.stopwatch);
+
+		if (position % 2 == 1) {
+			return inflater.inflate(R.layout.empty, parent, false);
 		}
-		
+
+		Tour tour1 = tours.get(position);
+
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+				50, 50);
+
+		title1.setText(tour1.getTitle());
+		time1.setText(tour1.getDuration() + " min");
+		icon1.setLayoutParams(layoutParams);
+
+		Drawable urlImage = null;
+		try {
+			urlImage = drawableFromUrl(tour1.getImageUrl());
+
+			icon1.setBackground(urlImage);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("un here");
+		}
+
+		if (position + 1 < tours.size()) {
+			Tour tour2 = tours.get(position + 1);
+
+			title2.setText(tour2.getTitle());
+			time2.setText(tour2.getDuration() + " min");
+			icon2.setLayoutParams(layoutParams);
+			// bar2.setVisibility(View.VISIBLE);
+			img2.setImageResource(R.drawable.stopwatch);
+			
+			try {
+				urlImage = drawableFromUrl(tour2.getImageUrl());
+
+				icon2.setBackground(urlImage);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("un here");
+			}
+		}
+
 		return rowView;
-		
-	}	
+
+	}
+
+	public static Drawable drawableFromUrl(String url) throws IOException {
+		Bitmap x;
+
+		HttpURLConnection connection = (HttpURLConnection) new URL(url)
+				.openConnection();
+		connection.connect();
+		InputStream input = connection.getInputStream();
+
+		x = BitmapFactory.decodeStream(input);
+		return new BitmapDrawable(x);
+	}
 
 }
