@@ -66,6 +66,9 @@ Button backTourButton;
 	
 	public void startTourButton(){
 		Intent start = new Intent(this, GoogleMapActivity.class);
+		Bundle b1 = new Bundle();
+		b1.putInt("noteNumber", 0);
+		start.putExtras(b1);
 		startActivity(start);
 		
 	}

@@ -29,7 +29,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:gravity="center_horizontal"
-        android:text="Next stop: Stab Alley"
+        android:text="Next stop:"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#FFFFFF"
         android:background="#808080" />
@@ -42,6 +42,22 @@
         android:layout_centerHorizontal="true"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/backToMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Menu" />
+
+    <Button
+        android:id="@+id/skipStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Next" />
 
 </RelativeLayout>
 

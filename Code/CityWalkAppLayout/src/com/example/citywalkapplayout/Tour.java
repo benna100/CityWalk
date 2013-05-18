@@ -23,6 +23,7 @@ public class Tour {
 	String description;
 	List<String> categories;
 	String imageUrl;
+	String noteOrder;
 	
 	/*
 	Tour(List<Notes> notes, LocalDate date, int idInput){
@@ -38,6 +39,12 @@ public class Tour {
 		this.dateAdded = LocalDate.now();
 	}
 	*/
+	public String[] getNoteOrder(){
+		return noteOrder.split(",");
+	}
+	public void setNoteOrder(String noteOrder){
+		this.noteOrder = noteOrder;
+	}
 	public int getDistance(){
 		return distance;
 	}

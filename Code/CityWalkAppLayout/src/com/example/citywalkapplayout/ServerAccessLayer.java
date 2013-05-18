@@ -45,6 +45,7 @@ public class ServerAccessLayer {
 		int views = 0;
 		double rating = 0;
 		String imageUrl = null;
+		String noteOrder = null;
 		try {
 			id = Integer.parseInt(tourDatabaseObject.getString("id"));
 			dateAdded = tourDatabaseObject.getString("dateAdded");
@@ -55,6 +56,7 @@ public class ServerAccessLayer {
 			rating = Double.parseDouble(tourDatabaseObject.getString("rating"));
 			description = tourDatabaseObject.getString("description");
 			imageUrl = tourDatabaseObject.getString("imageUrl");
+			noteOrder = tourDatabaseObject.getString("noteOrder");
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,6 +78,7 @@ public class ServerAccessLayer {
 		tour.setDescription(description);
 		tour.setCategories(categories);
 		tour.setImageUrl(imageUrl);
+		tour.setNoteOrder(noteOrder);
 		
 		return tour;
 	}
@@ -124,6 +127,7 @@ public class ServerAccessLayer {
 		    		String location = jsonNote.getString("location");
 		    		String link = jsonNote.getString("link");
 		    		String imageUrl = jsonNote.getString("imageUrl");
+		    		int id = jsonNote.getInt("id");
 		    		
 		    		POI poi = new POI();
 		    		poi.setTitle(title);
@@ -131,6 +135,7 @@ public class ServerAccessLayer {
 		    		poi.setLocation(location);
 		    		poi.setLink(link);
 		    		poi.setImageUrl(imageUrl);
+		    		poi.setId(id);
 		    		
 		    		noteList.add(poi);
 		    	}else if(jsonNote.getString("noteType").equals("TourNotes")){
@@ -144,6 +149,8 @@ public class ServerAccessLayer {
 		    		tourNote.setDescription(description);
 		    		tourNote.setLocation(location);
 		    		tourNote.setImageUrl(imageUrl);
+		    		int id = jsonNote.getInt("id");
+		    		tourNote.setId(id);
 		    		
 		    		noteList.add(tourNote);
 		    	}else{
