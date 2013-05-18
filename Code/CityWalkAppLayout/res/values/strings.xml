@@ -8,5 +8,16 @@
     <string name="title_activity_note_info">NoteInfo</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_tour_info">TourInfo</string>
+    
+     <string-array name="categorylist">
+        <item>All Categories</item>
+        <item>Architectural</item>
+        <item>Inspirational</item>
+        <item>Scenic</item>
+        <item>Romantic</item>
+        <item>Historical</item>
+        <item>Shopping</item>
+        <item>Entertaining</item>
+    </string-array>
 
 </resources>
