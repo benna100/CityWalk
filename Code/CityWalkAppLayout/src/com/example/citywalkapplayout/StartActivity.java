@@ -27,7 +27,8 @@ public class StartActivity extends Activity implements
 	float x = 0;
 	float y = 0;
 	int pos = 0;
-	
+	View lastSort;
+
 	static List<Tour> fulllist = new ArrayList<Tour>();
 	static boolean firstTime = true;
 
@@ -43,10 +44,10 @@ public class StartActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.activity_start);
-		if(firstTime){
+		if (firstTime) {
 			firstTime = false;
 			new LoadViewTask().execute();
-		}else{
+		} else {
 			setContentView(R.layout.activity_start);
 			setListenersAndAdapters();
 		}
@@ -54,6 +55,8 @@ public class StartActivity extends Activity implements
 	}
 
 	public void setListenersAndAdapters() {
+		lastSort = findViewById(R.id.viewed);
+		lastSort.setBackgroundResource(R.drawable.blue);
 
 		for (int i = 0; i < fulllist.size(); i++) {
 			Tour t = fulllist.get(i);
@@ -113,13 +116,17 @@ public class StartActivity extends Activity implements
 
 								int w = view.getWidth();
 								if (x < w / 2 | pos > un & uneven) {
+//									view.setBackgroundResource(R.drawable.blue);
 									pos -= 1;
 								}
 
 								selected = tours.get(pos);
+//								selected.setTitle("SELECTED!!!");
+//
+//								adapter.notifyDataSetChanged();
+
 								select(selected);
 
-								// adapter.notifyDataSetChanged();
 							}
 						}
 					}
@@ -177,7 +184,9 @@ public class StartActivity extends Activity implements
 	}
 
 	public void sort(View view) {
-
+		lastSort.setBackgroundResource(R.drawable.dark_gradient);
+		view.setBackgroundResource(R.drawable.blue);
+		lastSort = view;
 		List<Tour> tourList = new ArrayList<Tour>();
 		if (view.getId() == R.id.viewed) {
 			while (!fulllist.isEmpty()) {
@@ -211,7 +220,7 @@ public class StartActivity extends Activity implements
 				fulllist.remove(t);
 			}
 			// tourList = server.getSortedTour("rating");
-		} 
+		}
 
 		fulllist = tourList;
 
@@ -350,12 +359,12 @@ public class StartActivity extends Activity implements
 					fulllist = server.getSortedTour("views");
 					// Initialize an integer (that will act as a counter) to
 					// zero
-					
-						// Set the current progress.
-						// This value is going to be passed to the
-						// onProgressUpdate() method.
-					publishProgress(100);	
-					
+
+					// Set the current progress.
+					// This value is going to be passed to the
+					// onProgressUpdate() method.
+					publishProgress(100);
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
