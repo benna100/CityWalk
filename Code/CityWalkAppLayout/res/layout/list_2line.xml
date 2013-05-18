@@ -56,6 +56,7 @@
 
             <RatingBar
                 android:id="@+id/ratingBar1"
+                style="@style/myRatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -110,6 +111,7 @@
 
             <RatingBar
                 android:id="@+id/ratingBar2"
+                style="@style/myRatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="invisible" />

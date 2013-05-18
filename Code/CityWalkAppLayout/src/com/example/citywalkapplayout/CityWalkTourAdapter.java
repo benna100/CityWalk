@@ -14,7 +14,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -45,7 +47,23 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 		ImageView icon1 = (ImageView) rowView.findViewById(R.id.icon1);
 		ImageView icon2 = (ImageView) rowView.findViewById(R.id.icon2);
 		ImageView img2 = (ImageView) rowView.findViewById(R.id.ImageView05);
+		RatingBar bar1 = (RatingBar) rowView.findViewById(R.id.ratingBar1);
 		RatingBar bar2 = (RatingBar) rowView.findViewById(R.id.ratingBar2);
+		bar1.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				return true;
+			}
+		});
+		
+		bar2.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				return true;
+			}
+		});
 
 		if (position % 2 == 1) {
 			return inflater.inflate(R.layout.empty, parent, false);
@@ -59,12 +77,13 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 		title1.setText(tour1.getTitle());
 		time1.setText(tour1.getDuration() + " min");
 		icon1.setLayoutParams(layoutParams);
+		bar1.setRating((float) tour1.getRating());
 
 		Drawable urlImage = null;
 		try {
 			urlImage = drawableFromUrl(tour1.getImageUrl());
 
-			icon1.setBackground(urlImage);
+			icon1.setBackgroundDrawable(urlImage);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,13 +96,14 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 			title2.setText(tour2.getTitle());
 			time2.setText(tour2.getDuration() + " min");
 			icon2.setLayoutParams(layoutParams);
-			// bar2.setVisibility(View.VISIBLE);
+			bar2.setVisibility(View.VISIBLE);
+			bar2.setRating((float) tour2.getRating());
 			img2.setImageResource(R.drawable.stopwatch);
 			
 			try {
 				urlImage = drawableFromUrl(tour2.getImageUrl());
 
-				icon2.setBackground(urlImage);
+				icon2.setBackgroundDrawable(urlImage);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
