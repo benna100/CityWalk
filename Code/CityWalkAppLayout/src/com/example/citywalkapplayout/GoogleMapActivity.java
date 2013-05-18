@@ -36,6 +36,8 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -59,7 +61,8 @@ public class GoogleMapActivity extends FragmentActivity implements
 	// private LocationListener locationListener;
 	private static int noteNumber = 0;
 	private Vibrator vibrator;
-	private int hasFired=0;
+	private int hasFired = 0;
+	private Marker [] markers;
 
 	MapView mapView;
 
@@ -87,24 +90,6 @@ public class GoogleMapActivity extends FragmentActivity implements
 		// dtu2.longitude, dist);
 		// textView.setText(Float.toString(dist[0]));
 
-
-	}
-	protected void testPopUp(){
-		if (noteNumber > (hasFired-1)) {
-			hasFired++;
-			vibrator.vibrate(300);
-
-			String type = null;
-			if (noteNumber == notesList.size() - 1) {
-				type = "finish";
-			}
-
-			else {
-				type = "location";
-			}
-
-			displayNoteInfo(noteNumber, type);
-		}
 	}
 
 	protected void calculateDistanceToNextPoint(Location currentLocation) {
@@ -131,7 +116,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 			// intent.putExtra("number", noteNumber);
 			// startActivity(intent);
 
-			if (noteNumber > (hasFired-1)) {
+			if (noteNumber > (hasFired - 1)) {
 				hasFired++;
 				vibrator.vibrate(300);
 
@@ -203,15 +188,17 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 		// Draw markers for all the notes
 		// List<Notes> notesList = tour.getNoteList();
-
-		for (int i = 0; i < notesList.size(); i++) {
-			String noteType = notesList.get(i).getClass().getName();
-			Notes note = notesList.get(i);
-			drawMarker(noteType, note);
+		
+		for (int i = 0; i < notesOrder.size(); i++) {
+			String noteType = notesOrder.get(i).getClass().getName();
+			Notes note = notesOrder.get(i);
+			boolean visited = false;
+			if (i<noteNumber) visited = true;
+			drawMarker(noteType, note, visited);
 			System.out.println(noteType);
 
 		}
-		
+
 		tourLocations.listIterator();
 
 		enableBasicMapFunctionality();
@@ -344,7 +331,15 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 	}
 
-	public void drawMarker(String noteType, Notes note) {
+	public void drawMarker(String noteType, Notes note, boolean visited) {
+		BitmapDescriptor bitmapDescriptor;
+		if (visited) {
+			bitmapDescriptor = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+		} else {
+			bitmapDescriptor = BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+		}
 		if (noteType.equals("com.example.citywalkapplayout.POI")) {
 			POI poiNote = new POI();
 			// poiNote = (POI) notesList.get(i);
@@ -356,8 +351,9 @@ public class GoogleMapActivity extends FragmentActivity implements
 			double lat = Double.parseDouble(latLng[0]);
 			double lng = Double.parseDouble(latLng[1]);
 			LatLng notePosition = new LatLng(lat, lng);
-			Marker mark = mMap.addMarker(new MarkerOptions().position(
-					notePosition).title(title));
+			Marker mark = mMap
+					.addMarker(new MarkerOptions().position(notePosition)
+							.icon(bitmapDescriptor).title(title));
 		} else if (noteType.equals("com.example.citywalkapplayout.TourNotes")) {
 			TourNotes tourNote = new TourNotes();
 			// tourNote = (TourNotes) notesList.get(i);
@@ -368,8 +364,10 @@ public class GoogleMapActivity extends FragmentActivity implements
 			double lat = Double.parseDouble(latLng[0]);
 			double lng = Double.parseDouble(latLng[1]);
 			LatLng notePosition = new LatLng(lat, lng);
-			Marker mark = mMap.addMarker(new MarkerOptions().position(
-					notePosition).title(title));
+			Marker mark = mMap
+					.addMarker(new MarkerOptions().position(notePosition)
+							.icon(bitmapDescriptor).title(title));
+			
 
 		}
 	}
@@ -477,6 +475,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 		b1.putString("noteDescription", note.description);
 		b1.putString("imageUrl", note.imageUrl);
 		b1.putString("type", type);
+		
 		start.putExtras(b1);
 		start.putExtra("noteNumber", noteNumber);
 		startActivity(start);

@@ -2,11 +2,12 @@ package com.example.citywalkapplayout;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.R.bool;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
@@ -31,11 +32,12 @@ import android.widget.TextView;
 
 public class StartActivity extends Activity implements
 		SearchView.OnQueryTextListener {
-
+	private ProgressDialog progressDialog;
 	public static Tour selected;
 	float x = 0;
 	float y = 0;
 	int pos = 0;
+
 	List<Tour> tours = new ArrayList<Tour>();
 	List<Tour> fulllist = new ArrayList<Tour>();
 	List<Tour> filterlist = new ArrayList<Tour>();
@@ -49,39 +51,22 @@ public class StartActivity extends Activity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_start);
+		// setContentView(R.layout.activity_start);
+		new LoadViewTask().execute();
 
-		// final Tour[] tours = {new Tour(),new Tour(),new Tour(),new Tour()};
-		//
-		// for(int i = 0; i < tours.length; i++){
-		// Tour t = tours[i];
-		// t.setTitle("tour "+ i);
-		// t.setImg(R.drawable.mermaid);
-		// t.setDistance("30km");
-		// t.setDuration(90);new Tour()new Tour()new Tour()
-		// }
+	}
 
-		List<Tour> tourList = server.getSortedTour("views");
-		for (int i = 0; i < tourList.size(); i++) {
-			Tour t = tourList.get(i);
-			t.setDistance(300);
+	public void setListenersAndAdapters() {
+
+		for (int i = 0; i < fulllist.size(); i++) {
+			Tour t = fulllist.get(i);
 			tours.add(t);
-			fulllist.add(t);
 		}
 
 		filterlist = fulllist;
 
 		HorizontalScrollView sorter = (HorizontalScrollView) findViewById(R.id.sorter);
-		// sorter.setOnTouchListener(new OnTouchListener() {
-		//
-		// @Override
-		// public boolean onTouch(View v, MotionEvent event) {
-		// if (event.getAction() == MotionEvent.ACTION_DOWN){
-		// // TextView t = (TextView) v;
-		// // t.setText("LOL");
-		// }
-		// return false;
-		// }
+
 		// });
 
 		ListView listView = (ListView) findViewById(R.id.list);
@@ -93,32 +78,6 @@ public class StartActivity extends Activity implements
 					int pos, long id) {
 				String sel = parent.getSelectedItem().toString();
 				categorize(sel, pos);
-				// List<Tour> tourList = new ArrayList<Tour>();
-				// if (pos == 0) {
-				// tourList = fulllist;
-				// } else {
-				// for (int i = 0; i < fulllist.size(); i++) {
-				// Tour t = fulllist.get(i);
-				// List<String> c = t.getCategories();
-				// if (c.contains(sel)) {
-				// tourList.add(t);
-				// }
-				// }
-				// }
-				//
-				// filterlist = tourList;
-				//
-				// // adapter.clear();
-				// // adapter.addAll(tourList);
-				// // adapter.notifyDataSetChanged();
-				//
-				// if (mSearchView != null) {
-				// String s = mSearchView.getQuery().toString();
-				//
-				// if (s != null) {
-				// search(s);
-				// }
-				// }
 
 			}
 
@@ -174,24 +133,6 @@ public class StartActivity extends Activity implements
 				return true;
 			}
 		});
-		//
-		// // listView.setOnItemClickListener(new
-		// AdapterView.OnItemClickListener() {
-		// //
-		// // @Override
-		// // public void onItemClick(AdapterView<?> parent, final View view,int
-		// position, long id) {
-		// // final PreviewTour t;
-		// // try {
-		// // t = (PreviewTour) parent.getItemAtPosition(position+pos);
-		// // t.setTitle("" + parent.getCount());
-		// // } catch (Exception e) {
-		// // e.printStackTrace();
-		// // }
-		// // adapter.notifyDataSetChanged();
-		// // }
-		// //
-		// // });
 	}
 
 	public void search(String s) {
@@ -373,5 +314,78 @@ public class StartActivity extends Activity implements
 
 	protected boolean isAlwaysExpanded() {
 		return true;
+	}
+
+	private class LoadViewTask extends AsyncTask<Void, Integer, Void> {
+		// Before running code in separate thread
+		@Override
+		protected void onPreExecute() {
+			// Create a new progress dialog
+			progressDialog = new ProgressDialog(StartActivity.this);
+			// Set the progress dialog to display a horizontal progress bar
+			progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			// Set the dialog title to 'Loading...'
+			progressDialog.setTitle("Loading...");
+			// Set the dialog message to 'Loading application View, please
+			// wait...'
+			progressDialog
+					.setMessage("Loading application View, please wait...");
+			// This dialog can't be canceled by pressing the back key
+			progressDialog.setCancelable(false);
+			// This dialog isn't indeterminate
+			progressDialog.setIndeterminate(false);
+			// The maximum number of items is 100
+			progressDialog.setMax(100);
+			// Set the current progress to zero
+			progressDialog.setProgress(0);
+			// Display the progress dialog
+			progressDialog.show();
+		}
+
+		// The code to be executed in a background thread.
+		@Override
+		protected Void doInBackground(Void... params) {
+			/*
+			 * This is just a code that delays the thread execution 4 times,
+			 * during 850 milliseconds and updates the current progress. This is
+			 * where the code that is going to be executed on a background
+			 * thread must be placed.
+			 */
+			try {
+				// Get the current thread's token
+				synchronized (this) {
+					publishProgress(10);
+					fulllist = server.getSortedTour("views");
+					// Initialize an integer (that will act as a counter) to
+					// zero
+					
+						// Set the current progress.
+						// This value is going to be passed to the
+						// onProgressUpdate() method.
+					publishProgress(100);	
+					
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		// Update the progress
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			// set the current progress of the progress dialog
+			progressDialog.setProgress(values[0]);
+		}
+
+		// after executing the code in the thread
+		@Override
+		protected void onPostExecute(Void result) {
+			// close the progress dialog
+			progressDialog.dismiss();
+			// initialize the View
+			setContentView(R.layout.activity_start);
+			setListenersAndAdapters();
+		}
 	}
 }
