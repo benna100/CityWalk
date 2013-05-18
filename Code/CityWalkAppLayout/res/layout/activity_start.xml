@@ -2,26 +2,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3a5976"
+    android:background="@drawable/dark_gradient"
     tools:context=".StartActivity" 
     >
 
     <ListView
         android:id="@+id/list"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/sorter" >
 
     </ListView>
 
+    <Spinner
+        android:id="@+id/categories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:entries="@array/categorylist" />
+
     <HorizontalScrollView
         android:id="@+id/sorter"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        android:background="#4ac925"
+        android:layout_below="@+id/categories"
+        android:background="@drawable/dark_gradient"
         android:scrollbars="none" >
 
         <LinearLayout
@@ -30,44 +39,52 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/liked"
                 android:layout_width="74dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="Liked"
-                android:textSize="20dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:onClick="sort"
+                android:clickable="true"/>
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/newest"
                 android:layout_width="94dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="Newest"
-                android:textSize="20dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:onClick="sort"
+                android:clickable="true"/>
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/recommended"
                 android:layout_width="153dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="Recommended"
-                android:textSize="20dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:onClick="sort"
+                android:clickable="true"/>
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/viewed"
                 android:layout_width="151dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="Most Viewed"
-                android:textSize="20dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:onClick="sort"
+                android:clickable="true"/>
         </LinearLayout>
     </HorizontalScrollView>
 

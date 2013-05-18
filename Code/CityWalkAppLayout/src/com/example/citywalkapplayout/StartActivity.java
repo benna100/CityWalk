@@ -20,10 +20,12 @@ import android.view.TouchDelegate;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class StartActivity extends Activity implements
@@ -79,6 +81,36 @@ public class StartActivity extends Activity implements
 		// });
 
 		ListView listView = (ListView) findViewById(R.id.list);
+		Spinner categories = (Spinner) findViewById(R.id.categories);
+		categories.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int pos, long id) {
+				List<Tour> tourList = new ArrayList<Tour>();
+				for (int i = 0; i < fulllist.size(); i++) {
+					Tour t = fulllist.get(i);
+					List<String> c = t.getCategories();
+					if (pos == 0){
+						tourList.add(t);
+					}else if (c.contains(parent.getItemAtPosition(pos).toString())) {
+						tourList.add(t);
+					}
+				}
+				
+				adapter.clear();
+				adapter.addAll(tourList);
+				adapter.notifyDataSetChanged();
+				
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 
 		adapter = new CityWalkTourAdapter(this, tours);
 
@@ -157,6 +189,10 @@ public class StartActivity extends Activity implements
 		b1.putString("tourDescription", description);
 		start.putExtras(b1);
 		startActivity(start);
+	}
+	
+	public void sort(View v){
+		
 	}
 
 	@Override

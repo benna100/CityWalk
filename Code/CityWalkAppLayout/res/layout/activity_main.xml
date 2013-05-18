@@ -36,7 +36,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/recommended"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recommended     "
@@ -44,7 +44,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/viewed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Most Viewed"
