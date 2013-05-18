@@ -2,13 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/gradient"
     tools:context=".TourInfo" >
- 
+
     <Button
         android:id="@+id/backTour"
         android:layout_width="wrap_content"
@@ -35,18 +35,22 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:text="Large Text"
+        android:layout_marginTop="16dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/tourDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/tourImage"
         android:layout_below="@+id/tourTitle"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="20dp"
-        android:text="TextView" />
+        android:layout_marginTop="33dp"/>
+
+    <ImageView
+        android:id="@+id/tourImage"
+        android:layout_width="150dp"
+        android:layout_height="95dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/tourDescription" />
 
 </RelativeLayout>
