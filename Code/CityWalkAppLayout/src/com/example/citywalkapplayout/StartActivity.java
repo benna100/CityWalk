@@ -2,33 +2,23 @@ package com.example.citywalkapplayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.R.bool;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
-import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.TouchDelegate;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class StartActivity extends Activity implements
 		SearchView.OnQueryTextListener {
@@ -37,22 +27,29 @@ public class StartActivity extends Activity implements
 	float x = 0;
 	float y = 0;
 	int pos = 0;
+	
+	static List<Tour> fulllist = new ArrayList<Tour>();
+	static boolean firstTime = true;
 
 	List<Tour> tours = new ArrayList<Tour>();
-	List<Tour> fulllist = new ArrayList<Tour>();
 	List<Tour> filterlist = new ArrayList<Tour>();
 	ServerAccessLayer server = new ServerAccessLayer();
 	CityWalkTourAdapter adapter;
 
 	private SearchView mSearchView;
-	private TextView mStatusView;
 	Spinner categories;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.activity_start);
-		new LoadViewTask().execute();
+		if(firstTime){
+			firstTime = false;
+			new LoadViewTask().execute();
+		}else{
+			setContentView(R.layout.activity_start);
+			setListenersAndAdapters();
+		}
 
 	}
 
@@ -64,8 +61,6 @@ public class StartActivity extends Activity implements
 		}
 
 		filterlist = fulllist;
-
-		HorizontalScrollView sorter = (HorizontalScrollView) findViewById(R.id.sorter);
 
 		// });
 
