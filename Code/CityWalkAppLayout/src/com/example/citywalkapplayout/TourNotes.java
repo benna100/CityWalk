@@ -3,33 +3,49 @@ package com.example.citywalkapplayout;
 import com.google.android.gms.maps.model.LatLng;
 
 public class TourNotes extends Notes {
-	
-	public void setTitle(String title){
+
+	public void setTitle(String title) {
 		this.noteTitle = title;
 	}
-	public String getTitle(){
+
+	public String getTitle() {
 		return this.noteTitle;
 	}
-	
-	public void setDescription(String description){
+
+	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getDescription(){
+
+	public String getDescription() {
 		return this.description;
 	}
-	
-	public void setLocation(String location){
+
+	public void setLocation(String location) {
 		this.location = location;
 	}
-	public String getLocation(){
+
+	public String getLocation() {
 		return this.location;
 	}
-	
-	public void setImageUrl(String url){
-			this.imageUrl = url;
-			}
-			public String getImageUrl(){
-				return this.imageUrl;
-			}
-	
+
+	public void setImageUrl(String url) {
+		this.imageUrl = url;
+	}
+
+	public String getImageUrl() {
+		return this.imageUrl;
+	}
+
+	@Override
+	void setId(int id) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	int getId() {
+		// TODO Auto-generated method stub
+		return this.id;
+	}
+
 }

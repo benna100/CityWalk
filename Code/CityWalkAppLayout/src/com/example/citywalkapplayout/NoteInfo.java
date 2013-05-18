@@ -28,104 +28,117 @@ import android.text.style.LeadingMarginSpan.LeadingMarginSpan2;
 
 public class NoteInfo extends Activity {
 
-TextView noteTitle;
-TextView noteDescription;
-Button nextNote;
-Button noteInfoBackButton;
-
+	TextView noteTitle;
+	TextView noteDescription;
+	Button nextNote;
+	Button noteInfoBackButton;
+	private int noteNumber;
+	private boolean finish;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_note_info);
 		Bundle b = getIntent().getExtras();
-		
+
 		String noteTitleString = b.getString("noteTitle");
 		String notDescriptionString = b.getString("noteDescription");
 		String imageUrl = b.getString("imageUrl");
-		
-		nextNote = (Button)findViewById(R.id.nextNote);
-		noteInfoBackButton = (Button)findViewById(R.id.noteInfoBackButton);
+		noteNumber = b.getInt("noteNumber");
+		finish = b.getBoolean("finish");
+
+		nextNote = (Button) findViewById(R.id.nextNote);
+		noteInfoBackButton = (Button) findViewById(R.id.noteInfoBackButton);
 		nextNote.setText("Next sight");
 		nextNote.setTextColor(Color.parseColor("#FFFFFF"));
 		noteInfoBackButton.setTextColor(Color.parseColor("#FFFFFF"));
 		noteInfoBackButton.setText("Back to map");
-		
-		
+
 		noteTitle = (TextView) findViewById(R.id.noteTitle);
 		noteTitle.setText(noteTitleString);
 		noteTitle.setTextColor(Color.parseColor("#FFFFFF"));
-		
-		//noteDescription = (TextView) findViewById(R.id.noteDescription);
-		//noteDescription.setText(notDescriptionString);
-		//noteDescription.setTextColor(Color.parseColor("#FFFFFF"));
-		
+
+		// noteDescription = (TextView) findViewById(R.id.noteDescription);
+		// noteDescription.setText(notDescriptionString);
+		// noteDescription.setTextColor(Color.parseColor("#FFFFFF"));
+
 		Drawable urlImage = null;
-				try {
-					urlImage = drawableFromUrl(imageUrl);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					System.out.println("un here");
-				}
-		
-		//Drawable dIcon = getResources().getDrawable(R.drawable.mermaid);
-        
-		//Drawable dIcon = getResources().getDrawable(R.drawable.noteImage);
-        
-		//int leftMargin = dIcon.getIntrinsicWidth()+70;
+		try {
+			urlImage = drawableFromUrl(imageUrl);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("un here");
+		}
+
+		// Drawable dIcon = getResources().getDrawable(R.drawable.mermaid);
+
+		// Drawable dIcon = getResources().getDrawable(R.drawable.noteImage);
+
+		// int leftMargin = dIcon.getIntrinsicWidth()+70;
 		int leftMargin = 320;
-        ImageView icon = (ImageView) findViewById(R.id.noteImage);
-        //icon.setBackgroundDrawable(dIcon);
-    	icon.setBackgroundDrawable(urlImage);
-        //icon.setBackgroundDrawable(dIcon);
+		ImageView icon = (ImageView) findViewById(R.id.noteImage);
+		// icon.setBackgroundDrawable(dIcon);
+		icon.setBackgroundDrawable(urlImage);
+		// icon.setBackgroundDrawable(dIcon);
 
-        SpannableString ss = new SpannableString("asd ka skd aks dkj kjas dk askd jas kd kas dkjas dkj askjd kjas dkj aksjd kjas dkja skjd akjs dkjas dk askd kas dk askjd aksj dkjas dkja skdj aksjd kjasdnjas k");
-        //SpannableString ss = new SpannableString(notDescriptionString);
-        ss.setSpan(new MyLeadingMarginSpan2(5, leftMargin), 0, ss.length(), 0);
+		SpannableString ss = new SpannableString(
+				"asd ka skd aks dkj kjas dk askd jas kd kas dkjas dkj askjd kjas dkj aksjd kjas dkja skjd akjs dkjas dk askd kas dk askjd aksj dkjas dkja skdj aksjd kjasdnjas k");
+		// SpannableString ss = new SpannableString(notDescriptionString);
+		ss.setSpan(new MyLeadingMarginSpan2(5, leftMargin), 0, ss.length(), 0);
 
-        noteDescription = (TextView) findViewById(R.id.noteDescription);
-        noteDescription.setTextColor(Color.parseColor("#FFFFFF"));
-        noteDescription.setTextSize(16);
-        noteDescription.setWidth(400);
-        noteDescription.setText(ss);
-		
+		noteDescription = (TextView) findViewById(R.id.noteDescription);
+		noteDescription.setTextColor(Color.parseColor("#FFFFFF"));
+		noteDescription.setTextSize(16);
+		noteDescription.setWidth(400);
+		noteDescription.setText(ss);
+
 		noteInfoBackButton.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-		    	backToMap();
-		    }
-		});
-		
-		nextNote.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-		    	nextNote();
-		    }
-		});
-		
-		
-	}
-	
-	public static Drawable drawableFromUrl(String url) throws IOException {
-			    Bitmap x;
-		
-			    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-			    connection.connect();
-		    InputStream input = connection.getInputStream();
-	
-		    x = BitmapFactory.decodeStream(input);
-		    return new BitmapDrawable(x);
+			@Override
+			public void onClick(View v) {
+				backToMap();
 			}
-	
-	public void backToMap(){
+		});
+
+		nextNote.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				nextNote();
+			}
+		});
+
+	}
+
+	public static Drawable drawableFromUrl(String url) throws IOException {
+		Bitmap x;
+
+		HttpURLConnection connection = (HttpURLConnection) new URL(url)
+				.openConnection();
+		connection.connect();
+		InputStream input = connection.getInputStream();
+
+		x = BitmapFactory.decodeStream(input);
+		return new BitmapDrawable(x);
+	}
+
+	public void backToMap() {
 		Intent start = new Intent(this, GoogleMapActivity.class);
+
 		startActivity(start);
 	}
-	
-	public void nextNote(){
-		Intent start = new Intent(this, GoogleMapActivity.class);
-		startActivity(start);
+
+	public void nextNote() {
+		if (finish) {
+			Intent start = new Intent(this, FinishActivity.class);
+			startActivity(start);
+		} else {
+			Intent start = new Intent(this, GoogleMapActivity.class);
+			Bundle b1 = new Bundle();
+			noteNumber++;
+			b1.putInt("noteNumber", noteNumber);
+			start.putExtras(b1);
+			startActivity(start);
+		}
 	}
 
 	@Override
