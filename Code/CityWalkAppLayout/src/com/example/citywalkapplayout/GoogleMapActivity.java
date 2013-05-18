@@ -13,29 +13,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
-//import com.example.googlemapsapitester.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -44,15 +42,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.maps.MapView;
 
-import android.support.v4.app.FragmentActivity;
-
 public class GoogleMapActivity extends FragmentActivity implements
 		OnMarkerClickListener, OnInfoWindowClickListener, LocationListener {
 
 	private GoogleMap mMap;
-	private LocationListener mLocationListener;
-	private static final OnMarkerClickListener OnMarkerClickListener = null;
-	private List<LatLng> tour1 = null;
 	private UiSettings mUiSettings;
 	private Tour tour;
 	private List<Notes> notesList;
@@ -62,7 +55,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 	private static int noteNumber = 0;
 	private Vibrator vibrator;
 	private int hasFired = 0;
-	private Marker [] markers;
+	private List<Marker> markers = new ArrayList<Marker>();
 
 	MapView mapView;
 
@@ -194,7 +187,8 @@ public class GoogleMapActivity extends FragmentActivity implements
 			Notes note = notesOrder.get(i);
 			boolean visited = false;
 			if (i<noteNumber) visited = true;
-			drawMarker(noteType, note, visited);
+			Marker mark = drawMarker(noteType, note, visited);
+			markers.add(mark);
 			System.out.println(noteType);
 
 		}
@@ -252,6 +246,14 @@ public class GoogleMapActivity extends FragmentActivity implements
 		incrementNoteNumber();
 
 		setTitleOfNextStop();
+		updateMarker(noteNumber-1);
+	}
+
+	private void updateMarker(int i) {
+		// TODO Auto-generated method stub
+		String noteType = notesOrder.get(i).getClass().getName();
+		Notes note = notesOrder.get(i);
+		markers.set(i, drawMarker(noteType, note, true));
 	}
 
 	private void finishActivity() {
@@ -331,7 +333,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 
 	}
 
-	public void drawMarker(String noteType, Notes note, boolean visited) {
+	public Marker drawMarker(String noteType, Notes note, boolean visited) {
 		BitmapDescriptor bitmapDescriptor;
 		if (visited) {
 			bitmapDescriptor = BitmapDescriptorFactory
@@ -354,6 +356,8 @@ public class GoogleMapActivity extends FragmentActivity implements
 			Marker mark = mMap
 					.addMarker(new MarkerOptions().position(notePosition)
 							.icon(bitmapDescriptor).title(title));
+			//markers.add(mark);
+			return mark;
 		} else if (noteType.equals("com.example.citywalkapplayout.TourNotes")) {
 			TourNotes tourNote = new TourNotes();
 			// tourNote = (TourNotes) notesList.get(i);
@@ -367,9 +371,11 @@ public class GoogleMapActivity extends FragmentActivity implements
 			Marker mark = mMap
 					.addMarker(new MarkerOptions().position(notePosition)
 							.icon(bitmapDescriptor).title(title));
-			
+			//markers.add(mark);
+			return mark;
 
 		}
+		return null;
 	}
 
 	private JSONObject getDirectionObjectFromMaps(Tour tour) {
