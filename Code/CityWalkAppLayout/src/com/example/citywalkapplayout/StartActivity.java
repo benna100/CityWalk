@@ -216,10 +216,7 @@ public class StartActivity extends Activity implements
 				fulllist.remove(t);
 			}
 			// tourList = server.getSortedTour("rating");
-		} else if (view.getId() == R.id.alpha) {
-
-			// tourList = server.getSortedTour("title");
-		}
+		} 
 
 		fulllist = tourList;
 
