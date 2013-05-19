@@ -203,6 +203,7 @@ public class GoogleMapActivity extends FragmentActivity implements
 		// TODO Auto-generated method stub
 		TextView textView = (TextView) findViewById(R.id.nextStop);
 		textView.setText("Next stop: " + notesOrder.get(noteNumber).getTitle());
+		System.out.println("asd");
 	}
 
 	public Notes getCurrentNode() {

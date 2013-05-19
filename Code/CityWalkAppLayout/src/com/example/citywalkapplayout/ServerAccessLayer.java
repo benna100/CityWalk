@@ -187,7 +187,7 @@ public class ServerAccessLayer {
 		for (int i = 0; i < finalResult.length(); i++) {
 			try {
 				JSONObject jsonNote = finalResult.getJSONObject(i);
-				String location = jsonNote.getString("location");
+				String location = jsonNote.getString("tourLocationPoints");
 				String locationIndexString = jsonNote
 						.getString("locationIndex");
 				int locationIndex = Integer.parseInt(locationIndexString);
@@ -346,8 +346,9 @@ public class ServerAccessLayer {
 						poi.setLink(link);
 						poi.setImageUrl(imageUrl);
 						poi.setId(id);
-
+						
 						noteList.add(poi);
+
 					} else if (jsonNote3.getString("noteType").equals(
 							"TourNotes")) {
 						String title = jsonNote3.getString("noteTitle");
@@ -363,11 +364,13 @@ public class ServerAccessLayer {
 						tourNote.setImageUrl(imageUrl);
 						int id = jsonNote3.getInt("noteId");
 						tourNote.setId(id);
-
+						
 						noteList.add(tourNote);
+						System.out.println("asd");
+
 					}
 
-					String location = jsonNote3.getString("location");
+					String location = jsonNote3.getString("tourLocationPoints");
 					String locationIndexString = jsonNote3
 							.getString("locationIndex");
 					int locationIndex = Integer.parseInt(locationIndexString);
@@ -431,10 +434,60 @@ public class ServerAccessLayer {
 
 				Set<tourLocations> s = new LinkedHashSet<tourLocations>(
 						tourLocations);
+				/*			List<Notes> notez = new ArrayList<Notes>();
+
+				for (Notes note : noteList) {
+					if (!notez.isEmpty()) {
+
+						if (!notez.contains(note)) {
+							notez.add(note);
+						}
+					} else {
+						notez.add(note);
+					}
+				}
+	*/			
+				List<Notes> notez = new ArrayList<Notes>();
+
+				for (Notes note : noteList) {
+					if (!notez.isEmpty()) {
+						boolean isInList = false;
+						for (Notes note2 : notez){
+							int index = note2.id;
+							if (index == note.id){
+								isInList = true;
+							}
+							
+						}
+						if (!isInList) notez.add(note);
+					} else {
+						notez.add(note);
+					}
+				}
+				
+				List<tourLocations> tourNotez = new ArrayList<tourLocations>();
+
+				for (tourLocations note : tourLocations) {
+					if (!tourNotez.isEmpty()) {
+						boolean isInList = false;
+						for (tourLocations note2 : tourNotez){
+							int index = note2.locationIndex;
+							if (index == note.locationIndex){
+								isInList = true;
+							}
+							
+						}
+						if (!isInList) tourNotez.add(note);
+					} else {
+						tourNotez.add(note);
+					}
+				}
+
 				Set<Notes> s2 = new LinkedHashSet<Notes>(noteList);
-				List<Notes> noteList2 = new ArrayList<Notes>(s2);
-				List<tourLocations> tourLocations2 = new ArrayList<tourLocations>(
-						s);
+				// List<Notes> noteList2 = new ArrayList<Notes>(s2);
+				List<Notes> noteList2 = notez;
+				//List<tourLocations> tourLocations2 = new ArrayList<tourLocations>(s);
+				List<tourLocations> tourLocations2 = tourNotez;
 				tour2.setNotes(noteList2);
 				tour2.setTourLocations(tourLocations2);
 
