@@ -16,9 +16,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class StartActivity extends Activity implements
 		SearchView.OnQueryTextListener {
@@ -31,6 +33,11 @@ public class StartActivity extends Activity implements
 
 	static List<Tour> fulllist = new ArrayList<Tour>();
 	static boolean firstTime = true;
+
+	static List<Tour> viewlist = new ArrayList<Tour>();
+	static List<Tour> ratelist = new ArrayList<Tour>();
+	static List<Tour> datelist = new ArrayList<Tour>();
+	static List<Tour> proxlist = new ArrayList<Tour>();
 
 	List<Tour> tours = new ArrayList<Tour>();
 	List<Tour> filterlist = new ArrayList<Tour>();
@@ -58,12 +65,9 @@ public class StartActivity extends Activity implements
 		lastSort = findViewById(R.id.viewed);
 		lastSort.setBackgroundResource(R.drawable.blue);
 
-		for (int i = 0; i < fulllist.size(); i++) {
-			Tour t = fulllist.get(i);
-			tours.add(t);
-		}
+		tours.addAll(fulllist);
 
-		filterlist = fulllist;
+		filterlist.addAll(fulllist);;
 
 		// });
 
@@ -116,14 +120,24 @@ public class StartActivity extends Activity implements
 
 								int w = view.getWidth();
 								if (x < w / 2 | pos > un & uneven) {
-//									view.setBackgroundResource(R.drawable.blue);
+									// view.setBackgroundResource(R.drawable.blue);
 									pos -= 1;
+									
+//									TextView views = (TextView) view.findViewById(R.id.title1);
+//									views.setText("SELECTED!!!");
+//									views.setBackgroundResource(R.drawable.blue);
+									
+									GridLayout views = (GridLayout) view.findViewById(R.id.grid1);
+									views.setBackgroundResource(R.drawable.blue);
+								}else{
+									GridLayout views = (GridLayout) view.findViewById(R.id.grid2);
+									views.setBackgroundResource(R.drawable.blue);
 								}
 
 								selected = tours.get(pos);
-//								selected.setTitle("SELECTED!!!");
-//
-//								adapter.notifyDataSetChanged();
+								// selected.setTitle("SELECTED!!!");
+								//
+								// adapter.notifyDataSetChanged();
 
 								select(selected);
 
@@ -183,49 +197,83 @@ public class StartActivity extends Activity implements
 		}
 	}
 
-	public void sort(View view) {
+	public void sort() {
+		List<Tour> tourList = new ArrayList<Tour>();
+		
+		//initiate
+		viewlist.addAll(fulllist);
+		ratelist.addAll(fulllist);
+		datelist.addAll(fulllist);
+		proxlist.addAll(fulllist);
+		
+		// View sort
+		while (!viewlist.isEmpty()) {
+			int v = 0;
+			Tour t = null;
+			for (int i = 0; i < viewlist.size(); i++) {
+				Tour temp = viewlist.get(i);
+				if (temp.equals(null)) {
+					continue;
+				}
+				int vtemp = temp.getViews();
+				if (vtemp > v) {
+					t = temp;
+					v = vtemp;
+				}
+			}
+
+			if (t != null) {
+				tourList.add(t);
+			}
+			viewlist.remove(t);
+		}
+		viewlist = tourList;
+		fulllist = viewlist;
+
+		// Rate sort
+		tourList.clear();
+		while (!ratelist.isEmpty()) {
+			double r = 0;
+			Tour t = null;
+			for (int i = 0; i < ratelist.size(); i++) {
+				Tour temp = ratelist.get(i);
+				if (temp.equals(null)) {
+					continue;
+				}
+				double rtemp = temp.getRating();
+				if (rtemp > r) {
+					t = temp;
+					r = rtemp;
+				}
+			}
+			if (t != null) {
+				tourList.add(t);
+			}
+			ratelist.remove(t);
+			// tourList = server.getSortedTour("rating");
+		}
+		ratelist = tourList;
+
+		// Date sort
+
+		// Proximity sort
+		
+		fulllist = viewlist;
+	}
+
+	public void sortSelect(View view) {
 		lastSort.setBackgroundResource(R.drawable.dark_gradient);
 		view.setBackgroundResource(R.drawable.blue);
 		lastSort = view;
-		List<Tour> tourList = new ArrayList<Tour>();
+
 		if (view.getId() == R.id.viewed) {
-			while (!fulllist.isEmpty()) {
-				int v = 0;
-				Tour t = null;
-				for (int i = 0; i < fulllist.size(); i++) {
-					Tour temp = fulllist.get(i);
-					int vtemp = temp.getViews();
-					if (vtemp > v) {
-						t = temp;
-						v = vtemp;
-					}
-				}
-				tourList.add(t);
-				fulllist.remove(t);
-			}
-			// tourList = server.getSortedTour("views");
+			fulllist = viewlist;
 		} else if (view.getId() == R.id.rated) {
-			while (!fulllist.isEmpty()) {
-				double r = 0;
-				Tour t = null;
-				for (int i = 0; i < fulllist.size(); i++) {
-					Tour temp = fulllist.get(i);
-					double rtemp = temp.getRating();
-					if (rtemp > r) {
-						t = temp;
-						r = rtemp;
-					}
-				}
-				tourList.add(t);
-				fulllist.remove(t);
-			}
-			// tourList = server.getSortedTour("rating");
+			fulllist = ratelist;
 		}
 
-		fulllist = tourList;
-
 		adapter.clear();
-		adapter.addAll(tourList);
+		adapter.addAll(fulllist);
 		adapter.notifyDataSetChanged();
 
 		categorize(categories.getSelectedItem().toString(),
@@ -363,6 +411,10 @@ public class StartActivity extends Activity implements
 					// Set the current progress.
 					// This value is going to be passed to the
 					// onProgressUpdate() method.
+					publishProgress(70);
+
+					sort();
+
 					publishProgress(100);
 
 				}

@@ -7,9 +7,10 @@
 
     <GridLayout
         android:layout_width="160dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:columnCount="3" 
-        android:rowCount="3">
+        android:rowCount="3"
+        android:id="@+id/grid1">
 
         <LinearLayout android:layout_gravity="fill_horizontal" 
             android:layout_row="0"
@@ -67,9 +68,10 @@
 
     <GridLayout
         android:layout_width="160dp"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:columnCount="3" 
-        android:rowCount="3">
+        android:rowCount="3"
+        android:id="@+id/grid2">
 
         <LinearLayout android:layout_gravity="fill_horizontal" 
             android:layout_row="0"

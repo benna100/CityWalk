@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -48,6 +49,12 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 		ImageView icon1 = (ImageView) rowView.findViewById(R.id.icon1);
 		ImageView icon2 = (ImageView) rowView.findViewById(R.id.icon2);
 		ImageView img2 = (ImageView) rowView.findViewById(R.id.ImageView05);
+		
+		GridLayout grid1 = (GridLayout) rowView.findViewById(R.id.grid1);
+		GridLayout grid2 = (GridLayout) rowView.findViewById(R.id.grid2);
+		grid1.setMinimumWidth(rowView.getWidth()/2);
+		grid2.setMinimumWidth(rowView.getWidth()/2);
+		
 		RatingBar bar1 = (RatingBar) rowView.findViewById(R.id.ratingBar1);
 		RatingBar bar2 = (RatingBar) rowView.findViewById(R.id.ratingBar2);
 		bar1.setOnTouchListener(new OnTouchListener() {
