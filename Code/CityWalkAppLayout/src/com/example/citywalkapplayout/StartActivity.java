@@ -16,9 +16,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class StartActivity extends Activity implements
 		SearchView.OnQueryTextListener {
@@ -120,6 +122,16 @@ public class StartActivity extends Activity implements
 								if (x < w / 2 | pos > un & uneven) {
 									// view.setBackgroundResource(R.drawable.blue);
 									pos -= 1;
+									
+//									TextView views = (TextView) view.findViewById(R.id.title1);
+//									views.setText("SELECTED!!!");
+//									views.setBackgroundResource(R.drawable.blue);
+									
+									GridLayout views = (GridLayout) view.findViewById(R.id.grid1);
+									views.setBackgroundResource(R.drawable.blue);
+								}else{
+									GridLayout views = (GridLayout) view.findViewById(R.id.grid2);
+									views.setBackgroundResource(R.drawable.blue);
 								}
 
 								selected = tours.get(pos);
