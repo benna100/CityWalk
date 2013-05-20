@@ -43,15 +43,13 @@ public class TourInfo extends Activity {
 		ImageView icon = (ImageView) findViewById(R.id.tourImage);
 
 		Bundle b = getIntent().getExtras();
-
-		Drawable urlImage = null;
-		try {
-			urlImage = drawableFromUrl(b.getString("imageUrl"));
-			icon.setBackgroundDrawable(urlImage);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("un here");
+		
+		int id = b.getInt("id");
+		for(int i = 0; i < StartActivity.fulllist.size();i++){
+			Tour t = StartActivity.fulllist.get(i);
+			if(t.getId() == id){
+				icon.setBackgroundDrawable(t.getImg());
+			}
 		}
 
 		String tourTitleString = b.getString("tourTitle");
@@ -88,17 +86,17 @@ public class TourInfo extends Activity {
 		});
 	}
 
-	public static Drawable drawableFromUrl(String url) throws IOException {
-		Bitmap x;
-
-		HttpURLConnection connection = (HttpURLConnection) new URL(url)
-				.openConnection();
-		connection.connect();
-		InputStream input = connection.getInputStream();
-
-		x = BitmapFactory.decodeStream(input);
-		return new BitmapDrawable(x);
-	}
+//	public static Drawable drawableFromUrl(String url) throws IOException {
+//		Bitmap x;
+//
+//		HttpURLConnection connection = (HttpURLConnection) new URL(url)
+//				.openConnection();
+//		connection.connect();
+//		InputStream input = connection.getInputStream();
+//
+//		x = BitmapFactory.decodeStream(input);
+//		return new BitmapDrawable(x);
+//	}
 
 	public void backTourButton() {
 		Intent start = new Intent(this, StartActivity.class);

@@ -2,6 +2,8 @@ package com.example.citywalkapplayout;
 
 import java.util.List;
 
+import android.graphics.drawable.BitmapDrawable;
+
 public class Tour {
 	String comments;
 	/*LocalDate dateAdded;*/
@@ -13,12 +15,12 @@ public class Tour {
 	int duration;
 	int views;
 	double rating;
-	int img;
 	int distance;
 	String description;
 	List<String> categories;
 	String imageUrl;
 	String noteOrder;
+	BitmapDrawable img;
 	
 	/*
 	Tour(List<Notes> notes, LocalDate date, int idInput){
@@ -48,11 +50,11 @@ public class Tour {
 		distance = i;
 	}
 	
-	public int getImg(){
+	public BitmapDrawable getImg(){
 		return img;
 	}
 	
-	public void setImg(int i){
+	public void setImg(BitmapDrawable i){
 		img = i;
 	}
 	

@@ -88,17 +88,8 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 		icon1.setLayoutParams(layoutParams);
 		bar1.setRating((float) tour1.getRating());
 		id1.setText(tour1.getId()+"");
-
-		Drawable urlImage = null;
-		try {
-			urlImage = drawableFromUrl(tour1.getImageUrl());
-
-			icon1.setBackgroundDrawable(urlImage);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("un here");
-		}
+		
+		icon1.setBackgroundDrawable(tour1.getImg());
 
 		if (position + 1 < tours.size()) {
 			Tour tour2 = tours.get(position + 1);
@@ -112,31 +103,11 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 
 			id2.setText(tour2.getId()+"");
 			
-			try {
-				urlImage = drawableFromUrl(tour2.getImageUrl());
-
-				icon2.setBackgroundDrawable(urlImage);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("un here");
-			}
+			icon2.setBackgroundDrawable(tour2.getImg());
 		}
 
 		return rowView;
 
-	}
-
-	public static Drawable drawableFromUrl(String url) throws IOException {
-		Bitmap x;
-
-		HttpURLConnection connection = (HttpURLConnection) new URL(url)
-				.openConnection();
-		connection.connect();
-		InputStream input = connection.getInputStream();
-
-		x = BitmapFactory.decodeStream(input);
-		return new BitmapDrawable(x);
 	}
 
 }

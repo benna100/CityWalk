@@ -1,5 +1,9 @@
 package com.example.citywalkapplayout;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -7,6 +11,10 @@ import java.util.Locale;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -180,11 +188,11 @@ public class StartActivity extends Activity implements
 		Intent start = new Intent(this, TourInfo.class);
 		String title = tour.title;
 		String description = tour.description;
-		String imageUrl = tour.getImageUrl();
+		int id = tour.getId();
 		Bundle b1 = new Bundle();
 		b1.putString("tourTitle", title);
 		b1.putString("tourDescription", description);
-		b1.putString("imageUrl", imageUrl);
+		b1.putInt("id", id);
 		start.putExtras(b1);
 		startActivity(start);
 	}
@@ -432,6 +440,13 @@ public class StartActivity extends Activity implements
 					// Set the current progress.
 					// This value is going to be passed to the
 					// onProgressUpdate() method.
+					publishProgress(50);
+					
+					for(int i = 0;i < fulllist.size();i++){
+						Tour t = fulllist.get(i);
+						t.setImg((BitmapDrawable) drawableFromUrl(t.getImageUrl()));
+					}
+					
 					publishProgress(70);
 
 					sort();
@@ -461,5 +476,17 @@ public class StartActivity extends Activity implements
 			setContentView(R.layout.activity_start);
 			setListenersAndAdapters();
 		}
+	}
+	
+	public static Drawable drawableFromUrl(String url) throws IOException {
+		Bitmap x;
+
+		HttpURLConnection connection = (HttpURLConnection) new URL(url)
+				.openConnection();
+		connection.connect();
+		InputStream input = connection.getInputStream();
+
+		x = BitmapFactory.decodeStream(input);
+		return new BitmapDrawable(x);
 	}
 }
