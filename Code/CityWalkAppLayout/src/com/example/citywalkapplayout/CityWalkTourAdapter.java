@@ -50,6 +50,9 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 		ImageView icon2 = (ImageView) rowView.findViewById(R.id.icon2);
 		ImageView img2 = (ImageView) rowView.findViewById(R.id.ImageView05);
 		
+		TextView id1 = (TextView) rowView.findViewById(R.id.tourid1);
+		TextView id2 = (TextView) rowView.findViewById(R.id.tourid2);
+		
 		GridLayout grid1 = (GridLayout) rowView.findViewById(R.id.grid1);
 		GridLayout grid2 = (GridLayout) rowView.findViewById(R.id.grid2);
 		grid1.setMinimumWidth(rowView.getWidth()/2);
@@ -86,6 +89,7 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 		views1.setText(tour1.getViews() + " views");
 		icon1.setLayoutParams(layoutParams);
 		bar1.setRating((float) tour1.getRating());
+		id1.setText(tour1.getId()+"");
 
 		Drawable urlImage = null;
 		try {
@@ -107,6 +111,8 @@ public class CityWalkTourAdapter extends ArrayAdapter<Tour> {
 			bar2.setVisibility(View.VISIBLE);
 			bar2.setRating((float) tour2.getRating());
 			img2.setImageResource(R.drawable.viewsicon);
+
+			id2.setText(tour2.getId()+"");
 			
 			try {
 				urlImage = drawableFromUrl(tour2.getImageUrl());

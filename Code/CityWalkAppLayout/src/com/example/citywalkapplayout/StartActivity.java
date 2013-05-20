@@ -1,5 +1,6 @@
 package com.example.citywalkapplayout;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +68,8 @@ public class StartActivity extends Activity implements
 
 		tours.addAll(fulllist);
 
-		filterlist.addAll(fulllist);;
+		filterlist.addAll(fulllist);
+		;
 
 		// });
 
@@ -92,70 +94,92 @@ public class StartActivity extends Activity implements
 
 		listView.setAdapter(adapter);
 
-		listView.setOnTouchListener(new View.OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					ListView layout = (ListView) v;
-					int x = (int) event.getX();
-					int y = (int) event.getY();
-					int pos;
-					int un = 0;
-					boolean uneven = false;
-
-					for (int i = 0; i < layout.getChildCount(); i++) {
-						View view = layout.getChildAt(i);
-
-						Rect outRect = new Rect(view.getLeft(), view.getTop(),
-								view.getRight(), view.getBottom());
-
-						if (outRect.contains(x, y)) {
-							pos = (i + 1) * 2 - (i + 1);
-							if (tours.size() + 1 > pos) {
-								if (tours.size() % 2 == 1) {
-									un = tours.size() - 1;
-									uneven = true;
-								}
-
-								int w = view.getWidth();
-								if (x < w / 2 | pos > un & uneven) {
-									// view.setBackgroundResource(R.drawable.blue);
-									pos -= 1;
-									
-//									TextView views = (TextView) view.findViewById(R.id.title1);
-//									views.setText("SELECTED!!!");
-//									views.setBackgroundResource(R.drawable.blue);
-									
-									GridLayout views = (GridLayout) view.findViewById(R.id.grid1);
-									views.setBackgroundResource(R.drawable.blue);
-								}else{
-									GridLayout views = (GridLayout) view.findViewById(R.id.grid2);
-									views.setBackgroundResource(R.drawable.blue);
-								}
-
-								selected = tours.get(pos);
-								// selected.setTitle("SELECTED!!!");
-								//
-								// adapter.notifyDataSetChanged();
-
-								select(selected);
-
-							}
-						}
-					}
-
-				}
-				return true;
-			}
-		});
+		// listView.setOnTouchListener(new View.OnTouchListener() {
+		//
+		// @Override
+		// public boolean onTouch(View v, MotionEvent event) {
+		// if (event.getAction() == MotionEvent.ACTION_DOWN) {
+		// ListView layout = (ListView) v;
+		// int x = (int) event.getX();
+		// int y = (int) event.getY();
+		// int pos;
+		// int un = 0;
+		// boolean uneven = false;
+		//
+		// for (int i = 0; i < layout.getChildCount(); i++) {
+		// View view = layout.getChildAt(i);
+		//
+		// Rect outRect = new Rect(view.getLeft(), view.getTop(),
+		// view.getRight(), view.getBottom());
+		//
+		// if (outRect.contains(x, y)) {
+		// pos = (i + 1) * 2 - (i + 1);
+		// if (tours.size() + 1 > pos) {
+		// if (tours.size() % 2 == 1) {
+		// un = tours.size() - 1;
+		// uneven = true;
+		// }
+		//
+		// int w = view.getWidth();
+		// if (x < w / 2 | pos > un & uneven) {
+		// // view.setBackgroundResource(R.drawable.blue);
+		// pos -= 1;
+		//
+		// // TextView views = (TextView) view.findViewById(R.id.title1);
+		// // views.setText("SELECTED!!!");
+		// // views.setBackgroundResource(R.drawable.blue);
+		//
+		// GridLayout views = (GridLayout) view.findViewById(R.id.grid1);
+		// views.setBackgroundResource(R.drawable.blue);
+		// }else{
+		// GridLayout views = (GridLayout) view.findViewById(R.id.grid2);
+		// views.setBackgroundResource(R.drawable.blue);
+		// }
+		//
+		// selected = tours.get(pos);
+		// // selected.setTitle("SELECTED!!!");
+		// //
+		// // adapter.notifyDataSetChanged();
+		//
+		// select(selected);
+		//
+		// }
+		// }
+		// }
+		//
+		// }
+		// return true;
+		// }
+		// });
 	}
 
 	public void search(String s) {
 		mSearchView.setQuery(s, true);
 	}
 
-	public void select(Tour tour) {
+	public void select(View view) {
+		TextView tid;
+		if (view.getId() == R.id.grid1) {
+			tid = (TextView) view.findViewById(R.id.tourid1);
+		} else {
+			tid = (TextView) view.findViewById(R.id.tourid2);
+		}
+
+		Tour tour = new Tour();
+
+		for (int i = 0; i < fulllist.size(); i++) {
+			Tour t = fulllist.get(i);
+			String s = t.getId() + "";
+			if (s.equals(tid.getText())) {
+				tour = t;
+				break;
+			}
+		}
+
+//		TextView te = (TextView) view.findViewById(R.id.title1);
+
+		view.setBackgroundResource(R.drawable.blue);
+
 		Intent start = new Intent(this, TourInfo.class);
 		String title = tour.title;
 		String description = tour.description;
@@ -165,13 +189,15 @@ public class StartActivity extends Activity implements
 		b1.putString("tourDescription", description);
 		b1.putString("imageUrl", imageUrl);
 		start.putExtras(b1);
+
+		view.setBackgroundResource(R.drawable.dark_gradient);
 		startActivity(start);
 	}
 
 	public void categorize(String sel, int pos) {
 		List<Tour> tourList = new ArrayList<Tour>();
 		if (pos == 0) {
-			tourList = fulllist;
+			tourList.addAll(fulllist);
 		} else {
 			for (int i = 0; i < fulllist.size(); i++) {
 				Tour t = fulllist.get(i);
@@ -182,7 +208,8 @@ public class StartActivity extends Activity implements
 			}
 		}
 
-		filterlist = tourList;
+		filterlist.clear();
+		filterlist.addAll(tourList);
 
 		adapter.clear();
 		adapter.addAll(tourList);
@@ -199,13 +226,13 @@ public class StartActivity extends Activity implements
 
 	public void sort() {
 		List<Tour> tourList = new ArrayList<Tour>();
-		
-		//initiate
+
+		// initiate
 		viewlist.addAll(fulllist);
 		ratelist.addAll(fulllist);
 		datelist.addAll(fulllist);
 		proxlist.addAll(fulllist);
-		
+
 		// View sort
 		while (!viewlist.isEmpty()) {
 			int v = 0;
@@ -227,8 +254,7 @@ public class StartActivity extends Activity implements
 			}
 			viewlist.remove(t);
 		}
-		viewlist = tourList;
-		fulllist = viewlist;
+		viewlist.addAll(tourList);
 
 		// Rate sort
 		tourList.clear();
@@ -257,8 +283,8 @@ public class StartActivity extends Activity implements
 		// Date sort
 
 		// Proximity sort
-		
-		fulllist = viewlist;
+		fulllist.clear();
+		fulllist.addAll(viewlist);
 	}
 
 	public void sortSelect(View view) {
