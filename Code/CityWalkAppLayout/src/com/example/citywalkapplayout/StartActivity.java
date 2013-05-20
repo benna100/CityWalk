@@ -59,6 +59,7 @@ public class StartActivity extends Activity implements
 		// setContentView(R.layout.activity_start);
 		if (firstTime) {
 			firstTime = false;
+			setContentView(R.layout.splash);
 			new LoadViewTask().execute();
 		} else {
 			setContentView(R.layout.activity_start);
@@ -180,6 +181,8 @@ public class StartActivity extends Activity implements
 				break;
 			}
 		}
+		
+		selected = tour;
 
 //		TextView te = (TextView) view.findViewById(R.id.title1);
 
@@ -403,11 +406,11 @@ public class StartActivity extends Activity implements
 			// Set the progress dialog to display a horizontal progress bar
 			progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			// Set the dialog title to 'Loading...'
-			progressDialog.setTitle("Loading...");
+			progressDialog.setTitle("City Walk");
 			// Set the dialog message to 'Loading application View, please
 			// wait...'
 			progressDialog
-					.setMessage("Loading application View, please wait...");
+					.setMessage("Loading application, please wait...");
 			// This dialog can't be canceled by pressing the back key
 			progressDialog.setCancelable(false);
 			// This dialog isn't indeterminate
@@ -432,6 +435,7 @@ public class StartActivity extends Activity implements
 			try {
 				// Get the current thread's token
 				synchronized (this) {
+					//progressDialog.setMessage("Loading tours..");
 					publishProgress(10);
 					fulllist = server.getSortedTour("views");
 					// Initialize an integer (that will act as a counter) to
@@ -440,17 +444,17 @@ public class StartActivity extends Activity implements
 					// Set the current progress.
 					// This value is going to be passed to the
 					// onProgressUpdate() method.
+//					progressDialog.setMessage("Loading pictures..");
 					publishProgress(50);
-					
 					for(int i = 0;i < fulllist.size();i++){
 						Tour t = fulllist.get(i);
 						t.setImg((BitmapDrawable) drawableFromUrl(t.getImageUrl()));
 					}
-					
+
+//					progressDialog.setMessage("Applying scripts..");
 					publishProgress(70);
-
 					sort();
-
+					
 					publishProgress(100);
 
 				}
