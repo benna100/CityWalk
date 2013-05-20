@@ -78,9 +78,9 @@ public class NoteInfo extends Activity {
 		icon.setBackgroundDrawable(urlImage);
 		// icon.setBackgroundDrawable(dIcon);
 
-		SpannableString ss = new SpannableString(
-				"asd ka skd aks dkj kjas dk askd jas kd kas dkjas dkj askjd kjas dkj aksjd kjas dkja skjd akjs dkjas dk askd kas dk askjd aksj dkjas dkja skdj aksjd kjasdnjas k");
-		// SpannableString ss = new SpannableString(notDescriptionString);
+//		SpannableString ss = new SpannableString(
+//				"asd ka skd aks dkj kjas dk askd jas kd kas dkjas dkj askjd kjas dkj aksjd kjas dkja skjd akjs dkjas dk askd kas dk askjd aksj dkjas dkja skdj aksjd kjasdnjas k");
+		 SpannableString ss = new SpannableString(notDescriptionString);
 		ss.setSpan(new MyLeadingMarginSpan2(5, leftMargin), 0, ss.length(), 0);
 
 		noteDescription = (TextView) findViewById(R.id.noteDescription);
