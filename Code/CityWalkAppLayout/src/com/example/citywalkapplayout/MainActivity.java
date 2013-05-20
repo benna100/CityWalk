@@ -1,15 +1,10 @@
 package com.example.citywalkapplayout;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import android.os.Bundle;
-import android.os.StrictMode;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.Menu;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 public class MainActivity extends Activity {
 

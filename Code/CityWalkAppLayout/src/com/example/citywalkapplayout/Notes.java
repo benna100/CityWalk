@@ -1,6 +1,5 @@
 package com.example.citywalkapplayout;
 
-import com.google.android.gms.maps.model.LatLng;
 
 public abstract class Notes {
 	String noteTitle;

@@ -26,7 +26,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/citywalkicon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <meta-data
@@ -45,31 +45,33 @@
         </activity>
         <activity
             android:name="com.example.citywalkapplayout.StartActivity"
-            android:label="@string/title_activity_start"
-            android:screenOrientation="portrait" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.example.citywalkapplayout.CategoryActivity"
-            android:label="@string/title_activity_start"
+            android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.citywalkapplayout.GoogleMapActivity"
-            android:label="@string/title_activity_start"
+            android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.citywalkapplayout.NoteInfo"
-            android:label="@string/title_activity_note_info" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"  >
         </activity>
         <activity
             android:name="com.example.citywalkapplayout.TourInfo"
-            android:label="@string/title_activity_tour_info"
+            android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.citywalkapplayout.FinishActivity"
-            android:label="@string/title_activity_finish" >
+            android:label="@string/app_name" 
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

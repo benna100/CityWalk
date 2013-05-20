@@ -1,11 +1,6 @@
 package com.example.citywalkapplayout;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 public class Tour {
 	String comments;

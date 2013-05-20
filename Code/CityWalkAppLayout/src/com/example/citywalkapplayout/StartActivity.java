@@ -1,23 +1,20 @@
 package com.example.citywalkapplayout;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -189,8 +186,6 @@ public class StartActivity extends Activity implements
 		b1.putString("tourDescription", description);
 		b1.putString("imageUrl", imageUrl);
 		start.putExtras(b1);
-
-		view.setBackgroundResource(R.drawable.dark_gradient);
 		startActivity(start);
 	}
 
@@ -356,9 +351,9 @@ public class StartActivity extends Activity implements
 		} else {
 			for (int i = 0; i < filterlist.size(); i++) {
 				Tour t = filterlist.get(i);
-				if (t.getTitle().toLowerCase().contains(arg0.toLowerCase())
-						|| t.getDescription().toLowerCase()
-								.contains(arg0.toLowerCase())) {
+				if (t.getTitle().toLowerCase(Locale.ENGLISH).contains(arg0.toLowerCase(Locale.ENGLISH))
+						|| t.getDescription().toLowerCase(Locale.ENGLISH)
+								.contains(arg0.toLowerCase(Locale.ENGLISH))) {
 					tourList.add(t);
 				}
 			}
@@ -374,9 +369,9 @@ public class StartActivity extends Activity implements
 		List<Tour> tourList = new ArrayList<Tour>();
 		for (int i = 0; i < filterlist.size(); i++) {
 			Tour t = filterlist.get(i);
-			if (t.getTitle().toLowerCase().contains(arg0.toLowerCase())
-					|| t.getDescription().toLowerCase()
-							.contains(arg0.toLowerCase())) {
+			if (t.getTitle().toLowerCase(Locale.ENGLISH).contains(arg0.toLowerCase(Locale.ENGLISH))
+					|| t.getDescription().toLowerCase(Locale.ENGLISH)
+							.contains(arg0.toLowerCase(Locale.ENGLISH))) {
 				tourList.add(t);
 			}
 		}

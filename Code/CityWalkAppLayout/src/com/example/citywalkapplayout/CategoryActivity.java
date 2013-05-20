@@ -2,18 +2,10 @@ package com.example.citywalkapplayout;
 
 import java.util.ArrayList;
 
-import android.os.Bundle;
-import android.app.Activity;
 import android.app.ListActivity;
 import android.graphics.Color;
-import android.view.Menu;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
